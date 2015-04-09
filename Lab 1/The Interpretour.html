@@ -1,0 +1,1316 @@
+
+<!-- saved from url=(0048)http://web.cecs.pdx.edu/~mpj/cs322/interpretour/ -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+
+<title>The Interpretour</title>
+</head>
+<body text="#643200" bgcolor="#ffffff" link="#964800" vlink="#804000">
+
+<table cellspacing="0" border="0" cellpadding="1" align="center">
+<tbody><tr>
+<td align="left" valign="top">
+  <a href="http://web.cecs.pdx.edu/~mpj/cs322/">
+  <img src="./The Interpretour_files/cs322_banner.png" alt="CS 322 Languages and Compiler Design II">
+  </a>
+</td>
+<td align="right" valign="top">
+  <font size="6">The Interpretour</font> <br>
+  <font size="4">Spring 2015</font> <br>
+  (Last updated: March 25, 2015) <br>
+</td>
+</tr>
+<tr>
+<td colspan="2">
+<!-- Main material goes here -->
+<hr>
+
+<p>
+This page provides links to preliminary materials in support of
+the "Interpretour" lab.  I welcome feedback and suggestions for
+improvement but would be grateful if you could avoid circulating
+links to this page or the material that it provides while it is
+still in a preliminary stage.  Thanks!
+</p>
+
+<hr>
+<!-- <p>The following resources are currently available to download:
+<ul>
+<li>A set of <a href="interpretour-snapshots.zip">snapshots</a> that were
+taken at the end of each of the main phases during an actual run through
+of the tour.
+</ul>
+</p>
+
+<p>You are also welcome to use the videos below to sit in and watch as
+I make my way through each of the main stages of the interpretour, mostly
+successfully, although not without a few small trips along the way!
+</p>
+
+<hr>
+-->
+<h1>Welcome to the Interpretour!</h1>
+
+<p>This page describes a sequence of steps that you can follow to
+create a collection of interpreters, each adding new features to
+the <tt>Is</tt> interpreter that was presented in the lecture.
+Detailed instructions are provided and there are also videos that
+you can access (by clicking on the links at the top of each
+section) to watch me work through each step of the tour.  <b>But it
+won't be enough just to watch the videos, or to follow along with
+the instructions without thinking about what you are doing.
+Be sure that you can do these exercises yourself and that you
+understand the details of what is happening at each step!</b></p>
+
+<p>The following table of contents provides a quick way to access
+each of the main sections of the tour.  Keep in
+mind, however, that each step builds on the work of earlier steps
+so you should tackle them in order and you should ensure that you
+have a complete, working interpreter before you move on to the
+next step.</p>
+<ul>
+<li><p><a href="http://web.cecs.pdx.edu/~mpj/cs322/interpretour/#prelims">Preliminaries and Warmup (3:41)</a></p>
+</li><li><p><a href="http://web.cecs.pdx.edu/~mpj/cs322/interpretour/#dt">DT: Dynamic Typing (17:08)</a></p>
+</li><li><p><a href="http://web.cecs.pdx.edu/~mpj/cs322/interpretour/#nest">Nest: Nested Scopes (18:30)</a></p>
+</li><li><p><a href="http://web.cecs.pdx.edu/~mpj/cs322/interpretour/#proc">Proc: Procedures (26:08)</a></p>
+</li><li><p><a href="http://web.cecs.pdx.edu/~mpj/cs322/interpretour/#ref">Ref: Call-by-reference (18:48)</a></p>
+</li><li><p><a href="http://web.cecs.pdx.edu/~mpj/cs322/interpretour/#fcf">First-class functions (13:25)</a></p>
+</li></ul>
+<p>The numbers shown in parentheses after each step indicate the
+length of the associated video, which might give you some ideas
+about which steps will take more or less work.  However:</p>
+<ul>
+<li><p>In theory, you might be able to work through these steps
+more quickly because, unlike me, you won't be pausing to explain
+what you're doing.</p></li>
+
+<li><p>In practice, it will probably take you a bit longer because
+you'll need some time to read and make sense of the instructions,
+and to make sure you understand what you are doing at each step.
+This is <em>important</em>: Working through the instructions
+<em>without understanding</em> what you are doing is <em>a waste
+of your time</em> and won't help you when it comes to the homework
+assignment!  With that in mind, if you find a step that you don't
+understand, please <em>check the video</em> and/or <em>ask for
+help</em>.</p></li>
+</ul>
+
+<p>These instructions are written assuming that you are working on
+the command line and using a text editor.  Your choice of editor
+will likely have a major impact on your productivity, so choose an
+editor that you have some experience with and make sure you know
+how to perform operations that are common in programming work such
+as:
+</p><ul>
+<li>copying and moving text;
+</li><li>searching for occurrences of particular strings; or
+</li><li>general "find and replace" operations.
+</li></ul>
+If you don't know how to use your text editor effectively, then
+these exercises—and any other programming tasks that you
+take on—might take a lot longer than necessary.  You'll see
+that I've used vi/vim in the videos above, but other programmer's
+editors will work just as well.  Whichever editor you choose,
+take the time to learn how to use it well and you will likely see
+a boost in your productivity!<p></p>
+
+<p>If you are working on a reasonably sized screen, you might
+also find it helpful to use multiple windows, placed side by
+side.  Use one window, for example, to display and keep your
+place in these instructions; use another window for a command
+line prompt that you can use to compile and test your code;
+and use a third for your editor so that you can keep your
+place in the source code when you switch to the command line.
+(Just remember to <em>save</em> your work in the editor
+<em>before</em> you switch to the command line and attempt
+to <em>recompile</em>!)</p>
+
+<p>Of course, you can also do these exercises using a tool like
+Eclipse, but you should only attempt that if you already have some
+expertise using that tool, and if you are comfortable adapting the
+rest of these instructions as necessary.</p>
+
+<p>As you work through the instructions, do not assume that the
+code will compile without errors after each step.  That said, if
+the instructions suggest that the code should compile, then you
+are strongly encouraged to try recompiling (usually by typing
+<tt>javac *.java</tt>) as a way to test that you've followed all
+of the instructions up to that point.  And if it doesn't work as
+you'd expect, try to identify and fix the errors before you
+continue!</p>
+
+<hr>
+<h1><a name="prelims">Preliminaries and Warmup</a> (<a href="http://web.cecs.pdx.edu/~mpj/cs322/interpretour/#" onclick="Video=window.open(&#39;warmup.html&#39;,&#39;Video&#39;,&#39;toolbar=no,location=no,directories=no,scrollbars=no,resizable=no,width=660,height=380&#39;); return false;">video - 3:41</a>)</h1>
+
+<!--<p align=center>
+<iframe width="640" height="360" src="//www.youtube.com/embed/jslrYf9L1DM?rel=0" frameborder="0" allowfullscreen></iframe>
+</p> -->
+<p>We'll begin our tour with some preliminaries:</p>
+<ol>
+<!-- Step 1 -->
+<li><p>Download the <tt><a href="http://web.cecs.pdx.edu/~mpj/cs322/interpretour/interpretour.zip">interpretour.zip</a></tt> file, <tt>unzip</tt> it, and change in to the
+<tt>interpretour</tt> subdirectory:</p>
+<pre>  unzip interpretour
+  cd interpretour
+</pre>
+<p>As a quick summary, the folders in this directory are as follows:</p>
+<ul>
+<li><p><tt>As</tt> (<b>A</b>bstract syntax for a <b>s</b>ource
+    language): Defines a set of classes that provide a
+    representation for the abstract syntax for a simple imperative
+    programming language with integer-valued expressions
+    (<tt>IExpr</tt>), boolean-valued expressions (<tt>BExpr</tt>),
+    and statements (<tt>Stmt</tt>).</p>
+
+</li><li><p><tt>Ps</tt> (<b>P</b>rinting for a <b>s</b>ource language): Extends
+    the code in <tt>As</tt> with the definition of a <tt>show()</tt> method
+    for each expression and a <tt>print()</tt> method for each statement.</p>
+
+</li><li><p><tt>Is</tt> (<b>I</b>nterpreter for a <b>s</b>ource language): Extends
+    the code in <tt>Ps</tt> with the definition of an <tt>eval()</tt> method
+    for each expression and an <tt>exec()</tt> method for each statement; the
+    result is an <em>interpreter</em> for the language introduced in
+    <tt>As</tt>—that is, <tt>Is</tt> can be used to run programs that
+    are written in our simple imperative programming language.  The code in
+    this directory will be the starting point for the interpretour.</p>
+
+</li><li><p><tt>B</tt> (<b>B</b>ytecode interpreter): Adds support for a bytecode
+    interpreter for the language introduced in <tt>As</tt>, eliminating some
+    of the <em>interpretive overhead</em> in the <tt>Is</tt> interpreter.</p>
+
+</li><li><p><tt>extras</tt>: Some extra files that you'll use as you work through
+    the steps of this tour.
+</p></li></ul>
+<p>Note that the <tt>As</tt>, <tt>Ps</tt>, and <tt>B</tt> folders are
+only included for completeness; you might find it helpful to review their
+contents as a reminder of what was covered in the lecture, but we won't
+be using the files in those folders in the rest of the tour.</p>
+
+<!-- Step 2 -->
+</li><li><p>Make a copy of the <tt>Is</tt> folder that you can work in:</p>
+<pre>  cp -r Is Lab
+  cd Lab
+</pre>
+<p>(The <tt>-r</tt> argument to <tt>cp</tt> is a flag indicating that the full directory
+contents should be copied; it's short for "recursive".)</p>
+
+<p>Note that we'll be doing all of the remaining work inside the <tt>Lab</tt>
+directory that you've just created here.</p>
+ 
+<!-- Step 3 -->
+</li><li><p>
+Most of the changes that you'll be making as you work through this
+lab will be in the <tt>Src.java</tt> file.  You might want to take
+a look at the code in that file first to familiarize yourself with
+what is there.  (Of course, looking at the other files would be a
+good idea too; there aren't very many of them to review ...)
+
+</p></li></ol>
+
+<!-- WARMUP --------------------------------------------------------- -->
+<p>Next, a quick warm up exercise using the simple imperative
+language and the associated interpreter in <tt>Is</tt>:</p>
+<ol>
+
+<!-- Step 1 -->
+<li><p> Try compiling (<tt>javac *.java</tt>) and then try running the
+<tt>Main</tt> program (<tt>java Main</tt>) just to be sure you have
+everything working correctly.</p>
+
+<!-- Step 2 -->
+</li><li><p> Add a new abstract syntax class for representing multiplication
+expressions.  (You should call the new class <tt>Mult</tt> and use a
+copy of one of the existing classes as your starting point for this ...)</p>
+
+<!-- Step 3 -->
+</li><li><p> Modify the abstract syntax for the test program in <tt>Main.java</tt>
+to compute a factorial rather than a sum.</p>
+
+<p>[Do not spend a lot of time figuring out how to do this.  In
+particular, you do not need to write new abstract syntax code ...
+starting from the supplied code, just change the way the two
+variables are initialized, setting both to <tt>1</tt>, and then
+change the part of the abstract syntax that represents <tt>t+i</tt>
+to something that instead represents <tt>t*i</tt> ... Once you've
+done this, you're likely to see an output of <tt>3628800</tt>,
+which is <tt>10</tt> factorial!  And you should also be able to
+read the pretty-printed version of the abstract syntax to get a
+better understanding of how the modified code arrives at this
+result.]</p>
+
+<!-- Step 4 -->
+</li><li><p>Test, to make sure it works as you expect.  (Don't forget to
+recompile everything first!)</p>
+
+<!-- Step 5 -->
+</li><li><p>Just for the record, let's take a snapshot of what we've done so far:</p>
+<pre>   mkdir Mult
+   cp *.java Mult
+</pre>
+<p>From now on, any time you want to refer back to what you did in this
+part of the tour, you can just look in the <tt>Mult</tt> directory.  Ok,
+all warmed up?  Let's proceed to the main parts of the tour!</p>
+</li></ol>
+
+<hr>
+<!-- DT ------------------------------------------------------------- -->
+<h1><a name="dt">DT: Dynamic Typing</a> (<a href="http://web.cecs.pdx.edu/~mpj/cs322/interpretour/#" onclick="Video=window.open(&#39;dt.html&#39;,&#39;Video&#39;,&#39;toolbar=no,location=no,directories=no,scrollbars=no,resizable=no,width=660,height=380&#39;); return false;">video - 17:08</a>)</h1>
+<!-- <p align=center>
+<iframe width="640" height="360" src="//www.youtube.com/embed/bETJ_PWxgLw?rel=0" frameborder="0" allowfullscreen></iframe>
+</p> -->
+<p>Now we're going to modify our interpreter to support a
+<em>dynamically typed language</em> in which a single variable can
+hold different types of value at different times during the
+execution of the program.</p>
+
+<ol>
+<!-- Step 1 -->
+<li><p>To get started, we'll introduce a <tt>Value</tt> class, with
+subclasses for integers and Booleans.  In later steps, we'll modify
+the interpreter so that the contents of every variable is represented
+by an object of type <tt>Value</tt>: in other words, this will allow each
+variable to contain either an integer or a Boolean value.</p>
+<pre>  // Add this code to the Src.java file:
+  abstract class Value {
+    abstract String show();
+  }
+
+  class BValue extends Value {
+    private boolean b;
+    BValue(boolean b) { this.b = b; }
+
+    String show() {
+      return Boolean.toString(b);
+    }
+  }
+
+  class IValue extends Value {
+    private int i;
+    IValue(int i) { this.i = i; }
+
+    String show() {
+      return Integer.toString(i);
+    }
+  }
+</pre>
+
+<!-- Step 2 -->
+</li><li><p>Next, we'll modify the <tt>Memory</tt> class so that it
+can store arbitrary <tt>Values</tt>.  We'll also change the
+memory <tt>load</tt> operation to trigger an error if a program
+accesses an uninitialized variable:</p>
+<pre>   // This replaces the code in the original Memory.java file:
+   class Memory {
+     private Hashtable&lt;String,Value&gt; memory
+        = new Hashtable&lt;String,Value&gt;();
+
+     Value load(String name) {
+       Value val = memory.get(name);
+       if (val==null) {
+         System.out.println("ABORT: Variable " + name + " not defined");
+         System.exit(1);
+       }
+       return val;
+     }
+
+     void store(String name, Value val) {
+       memory.put(name, val);
+     }
+   }
+</pre>
+<p>Note how easy this was!  Now we can store any type of
+<tt>Value</tt> in memory, so long as it is represented using a
+subclass of <tt>Value</tt>.</p>
+
+<!-- Step 3 -->
+</li><li><p>Merge the <tt>IExpr</tt> and <tt>BExpr</tt> types into a single
+<tt>Expr</tt> type:</p>
+<ul>
+
+<li><p>Delete the abstract <tt>BExpr</tt> class.</p>
+
+</li><li><p>Replace all occurrences of <tt>IExpr</tt> and
+    <tt>BExpr</tt> with <tt>Expr</tt>.</p>
+
+</li><li><p>Combine the comments showing the grammar for integer
+   and boolean expressions into a single comment.  This won't
+   change the behavior of the code, but it will keep the comments
+   up to date, and comments are an important part of program
+   documentation.!</p>
+
+</li><li><p>Find the definitions of every <tt>eval()</tt> method and
+   change the return type to <tt>Value</tt> instead of <tt>int</tt>
+   or <tt>boolean</tt>.</p>
+</li></ul>
+
+<!-- Step 4 -->
+</li><li><p>Now we have merged integers and Booleans into a single
+<tt>Value</tt> type.  But what about the places where the code
+actually needs <em>a specific type</em> of value?  For example, <tt>if</tt> and <tt>while</tt> loops require a <tt>boolean</tt> test,
+<tt>print</tt> requires an <tt>int</tt>eger argument, and
+addition requires two <tt>int</tt>eger arguments.  Here
+are some steps we can take to deal with this:</p>
+<ul>
+<li><p>Add an <tt>asBool()</tt> method to the <tt>Value</tt> and
+<tt>BValue</tt> classes:</p>
+<pre>  // in Value:
+  boolean asBool() {
+    System.out.println("ABORT: Boolean value expected");
+    System.exit(1);
+    return true; // Not reached
+  }
+
+  // in BValue:
+  boolean asBool() { return b; }
+</pre>
+<p>Now, whenever you have an expression <tt>e</tt> that produces a
+<tt>Value</tt> as its result and you need to make sure that it is
+actually a boolean, you can use <tt>e.asBool()</tt>.  If <tt>e</tt>
+was constructed using an expression of the form
+<tt>new BValue(b)</tt>, then <tt>e.asBool()</tt> will just
+return the Boolean <tt>b</tt> that you'd expect.  But if
+<tt>e</tt> was constructed using <tt>new IValue(n)</tt>, then
+<tt>e.asBool()</tt> will trigger a runtime type
+error.  Although we'd hope that the latter won't happen very
+often in practice, it is still the correct outcome in this
+case.</p>
+
+</li><li><p>Add a corresponding <tt>asInt()</tt> method to the
+<tt>Value</tt> and <tt>IValue</tt> classes.
+
+</p></li><li><p>Add calls to <tt>asBool()</tt> or <tt>asInt()</tt> in the
+places where they are needed to ensure that an <tt>eval()</tt>
+call produces a specific type of value.  For example, in the
+<tt>Print</tt> class, <tt>exp.eval(mem)</tt> should be rewritten
+as <tt>exp.eval(mem).asInt()</tt>.  As another example, the
+<tt>eval()</tt> method for the <tt>LT</tt> class should look like
+this once you are done:</p>
+<pre>  Value eval(Memory mem) {
+    return l.eval(mem).asInt() &lt; r.eval(mem).asInt();
+  }
+</pre>
+<p>The point here is that the two arguments of a less than
+comparison are supposed to be <tt>int</tt>egers, so we need to
+call the <tt>asInt()</tt> method on the two values before we try
+to compare them.</p>
+
+<p>In principle, it would be possible to define versions of
+<tt>LT</tt> and <tt>EqEq</tt> (the less than and equality tests,
+respectively) that can be used to compare pairs of Boolean values
+or pairs of integers.  However, to simplfy the current task,
+we'll only allow these operations to be used on integers.</p>
+
+<p>Note that <tt>Assign</tt>ment operations do NOT require an
+<tt>asInt()</tt> or <tt>asBool()</tt> because now we can store
+any type of <tt>Value</tt> in our <tt>Memory</tt> objects ...</p>
+
+<p>Don't expect this code to compile yet ... we've more work to do!</p>
+</li></ul>
+
+<!-- Step 5 -->
+</li><li><p>In Step 3, we modified the return type for <tt>eval()</tt>
+to produce <tt>Value</tt> results instead of <tt>int</tt>s or
+<tt>boolean</tt>s.  Now we need to modify the bodies of those
+methods to make sure that they do, indeed return results of type
+<tt>Value</tt>, as promised by the declared type.  Specifically,
+any <tt>eval()</tt> method definitions that were originally
+defined to return an <tt>int</tt> value should now be modified to
+wrap their result in a <tt>new IValue(...)</tt> call.  Similarly,
+any <tt>eval()</tt> method definitions that previously returned a
+<tt>boolean</tt> result should be modified to wrap their result
+in a <tt>new BValue(...)</tt> call.</p>
+
+<p>For example, the <tt>eval()</tt> method for <tt>Int</tt> will look
+something like this:</p>
+<pre>  Value eval(Memory mem) { return new IValue(num); }
+</pre>
+<p>As another example, with this change, your implementation of
+<tt>eval()</tt> in the <tt>LT</tt> class will look something like
+the following:</p>
+<pre>  Value eval(Memory mem) {
+    return new BValue(l.eval(mem).asInt() &lt; r.eval(mem).asInt());
+  }
+</pre>
+<p>Why? We've added the <tt>new BValue(...)</tt> wrapper because
+the result of a comparison is a <tt>boolean</tt>, but
+<tt>eval()</tt> is supposed to return something of type
+<tt>Value</tt>.</p>
+
+<!-- Step 6 -->
+</li><li><p>Try compiling: <tt>javac *.java</tt>.
+   Fix any errors that are reported.</p>
+
+   <p>Try running <tt>java Main</tt> and check that the output is
+      the same as you got with the previous version of the code!</p>
+
+<!-- Step 7 -->
+</li><li><p>Make a copy of <tt>../extras/MainDT.java</tt> and try running
+that:
+</p><pre>   cp ../extras/MainDT.java .
+   javac *.java
+   java MainDT
+</pre>
+
+<!-- Step 8 -->
+</li><li><p>Would you like to keep a snapshot of your code?  I'd recommend
+that, doing something like the following:</p>
+<pre>   mkdir DT
+   cp *.java DT
+</pre>
+<p>Ready for some more?</p>
+</li></ol>
+
+
+<hr>
+<!-- Nest ----------------------------------------------------------- -->
+<h1><a name="nest">Nest: Nested Scopes</a> (<a href="http://web.cecs.pdx.edu/~mpj/cs322/interpretour/#" onclick="Video=window.open(&#39;nest.html&#39;,&#39;Video&#39;,&#39;toolbar=no,location=no,directories=no,scrollbars=no,resizable=no,width=660,height=380&#39;); return false;">video - 18:30</a>)</h1>
+<!-- <p align=center>
+<iframe width="640" height="360" src="//www.youtube.com/embed/mxVQ1E3tXj8?rel=0" frameborder="0" allowfullscreen></iframe>
+</p> -->
+<p>Now we'll switch to using environments instead of memories for
+storing variable values.  This is a first step toward adding
+support for functions.</p>
+<ol>
+<!-- Step 1 -->
+<li><p>First, let's clean up after <tt>DT</tt>.  Type carefully:
+you don't want to delete the wrong files!</p>
+<pre>   rm *.class
+</pre>
+
+<!-- Step 2 -->
+</li><li><p>Replace every <tt>(Memory mem)</tt> with <tt>(Env
+env)</tt>, and every <tt>(mem)</tt> with <tt>(env)</tt>.  The code
+will not compile at this point, so don't be alarmed if you try and
+that produces errors!</p>
+
+<!-- Step 3 -->
+</li><li><p>Switch from using memories to environments.</p>
+<ul>
+<li><p>Delete <tt>Memory.java</tt>.</p>
+
+</li><li><p>Add <tt>Env.java</tt> with the following code:</p>
+<pre>   class Env {
+     private String var;
+     private Value  val;
+     private Env    rest;
+     Env(String var, Value val, Env rest) {
+       this.var = var; this.val = val; this.rest = rest;
+     }
+
+     Value getValue() { return val; }
+
+     void  setValue(Value val) { this.val = val; }
+
+     static Env lookup(Env env, String name) {
+       for (; env!=null; env=env.rest) {
+         if (name.equals(env.var)) {
+           return env;
+         }
+       }
+       System.out.println("ABORT: Variable " + name + " not defined");
+       System.exit(1);
+       return null; // not reached
+     }
+   }
+</pre>
+
+</li><li><p>Modify the code in the <tt>Var</tt> class for loading a
+variable from memory to look up the relevant environment entry
+instead and then get the value that is stored there.  The
+resulting method should look something like this:</p>
+<pre>   Value eval(Env env) { return Env.lookup(env, name).getValue(); }
+</pre>
+
+</li><li><p>Make a corresponding change to the implementation of <tt>exec()</tt> in the <tt>Assign</tt> class.</p>
+
+</li><li><p>Update <tt>Main.java</tt> and <tt>MainDT.java</tt> to pass a <tt>null</tt> environment to
+  <tt>exec()</tt> instead of creating an empty <tt>Memory</tt>.</p>
+</li></ul>
+
+<!-- Step 4 -->
+</li><li><p>Modify the <tt>exec()</tt> method so that it returns an
+<tt>Env</tt> value instead of <tt>void</tt>.  The intuition here
+is that the input parameter represents the environment when the
+statement begins to execute, and the return result is the
+environment at the end.  Assume, in general, that a statement
+could change the environment (although none of the statements that
+we have right now can do this).  For example, the implementation
+of <tt>exec()</tt> in the <tt>Seq</tt> class will look something
+like this:</p>
+<pre>  Env exec(Env env) {
+    return r.exec(l.exec(env));
+  }
+</pre>
+<p>Do you see why?</p>
+
+<p>As a further example, the implementation of <tt>exec()</tt> in
+the <tt>While</tt> class will look like this, returning the same
+environment at the end of the loop as we had at the beginning.
+(In other words, the structure of the environment is the same—no
+new variables are introduced, for example—although the values of
+specific variables may have changed.)</p>
+<pre>  Env exec(Env env) {
+    while (test.eval(env).asBool()) {
+      body.exec(env);
+    }
+    return env;
+  }
+</pre>
+<p>In practice, most of the changes you make in this step will end up
+doing much the same thing as this last example.</p>
+
+<!-- Step 5 -->
+</li><li><p>Compile and run <tt>java Main</tt>.
+What goes wrong?  Why?  And how should we fix it?</p>
+
+<!-- Step 6 -->
+</li><li><p>Now let's add a new form of statement for declaring a new
+variable (represented by the name <tt>var</tt>) and its initial
+value (given by the value of the expression <tt>expr</tt>):</p>
+<pre>class VarDecl extends Stmt {
+  private String var;
+  private Expr   expr;
+  VarDecl(String var, Expr expr) {
+    this.var = var; this.expr = expr;
+  }
+
+  Env exec(Env env) {
+    return new Env(var, expr.eval(env), env);
+  }
+
+  void print(int ind) {
+    indent(ind);
+    System.out.println("var " + var + " = " + expr.show() + ";");
+  }
+}
+</pre>
+
+<!-- Step 7 -->
+</li><li><p>Modify the first two statements in the test program
+in <tt>Main.java</tt> to use <tt>VarDecl</tt> constructs
+instead of <tt>Assign</tt> constructs.  Recompile and test.
+How does this look now?</p>
+
+<p>See if you can update <tt>MainDT</tt> in a corresponding
+way.</p>
+
+<!-- Step 8 -->
+</li><li><p>Make a copy of <tt>../extras/MainNest.java</tt> and
+try running that:</p>
+<pre>   cp ../extras/MainNest.java .
+   javac *.java
+   java MainNest
+</pre>
+
+<!-- Step 9 -->
+</li><li><p>Time for another snapshot!</p>
+<pre>   mkdir Nest
+   cp *.java Nest
+</pre>
+<p>And onward!</p>
+</li></ol>
+
+<hr>
+<!-- Proc ----------------------------------------------------------- -->
+<h1><a name="proc">Proc: Procedures</a> (<a href="http://web.cecs.pdx.edu/~mpj/cs322/interpretour/#" onclick="Video=window.open(&#39;proc.html&#39;,&#39;Video&#39;,&#39;toolbar=no,location=no,directories=no,scrollbars=no,resizable=no,width=660,height=380&#39;); return false;">video - 26:08</a>)</h1>
+<!-- <p align=center>
+<iframe width="640" height="360" src="//www.youtube.com/embed/KyoTNHRE8A4?rel=0" frameborder="0" allowfullscreen></iframe>
+</p> -->
+<p>Now we're going to extend our language so that each program can
+include the definition of some procedures; these are like void
+functions in C or Java because they don't return a result.  To
+complete this task, we'll need to add a new abstract syntax for
+programs that contain procedures, and a corresponding abstract
+syntax for procedure call statements.</p>
+
+<ol>
+<!-- Step 1 -->
+<li><p>Clean up time!</p>
+<pre>   rm *.class
+</pre>
+
+<!-- Step 2 -->
+</li><li><p>Add the following class to provide an abstract syntax for
+complete programs (we'll add some more code shortly to represent a
+collection of procedures):</p>
+<pre>  class Program {
+    private Stmt body;
+
+    Program(Stmt body) {
+      this.body = body;
+    }
+
+    void run() {
+      body.exec(this, null);
+    }
+
+    void print() {
+      body.print(4);
+      System.out.println();
+    }
+  }
+</pre>
+
+<!-- Step 3 -->
+</li><li><p>You might have noticed that the <tt>exec()</tt> call in the
+above now has two parameters, including a new <tt>Program</tt>
+argument represented by <tt>this</tt>.  We need to include this as
+a parameter to <tt>exec()</tt> so that our programs will be able
+to look up procedure definitions if they encounter a call.  But
+this also means that we need to make some updates to the rest of
+our code:</p>
+<ul>
+<li><p>Change the definition of every <tt>exec()</tt> method to
+  have a type of the form: <tt>Env exec(Program prog, Env
+  env)</tt>.  [Hint: you can probably find all of the places that
+  need to be changed by searching for occurrences of the string
+  "<tt>Env exec</tt>".]</p>
+
+</li><li><p>Change all of the calls to <tt>exec()</tt> to include an
+  extra <tt>prog</tt> parameter.  Again, you can probably find
+  all of the places that you need to change by searching for
+  occurrences of the string "<tt>.exec(</tt>" ...</p>
+
+</li><li><p>Note that we don't have to change any of the definitions
+for <tt>eval()</tt>.  Why not?</p>
+
+</li><li><p>Modify each of the <tt>Main*.java</tt> files to construct
+and use a <tt>Program</tt> object, as in the following:</p>
+<pre>    Program prog = new Program(s);
+
+    System.out.println("Complete program is:");
+    prog.print();
+
+    System.out.println("Running in an empty environment:");
+    prog.run();
+
+    System.out.println("Done!");
+</pre>
+
+</li><li><p>You should now be able to compile and run the code again.
+You shouldn't see any changes in behavior yet, but this is a good
+way to make sure you haven't broken anything either.</p>
+</li></ul>
+
+<!-- Step 4 -->
+</li><li><p>Now let's add some abstract syntax to represent procedures.  Every
+procedure, of course, has a name, a list of formal parameters, and a
+body (i.e., the code that you'll execute when the procedure is called):</p>
+<pre>   class Proc {
+     private String   name;
+     private String[] formals;
+     private Stmt     body;
+
+     Proc(String name, String[] formals, Stmt body) {
+       this.name = name; this.formals = formals; this.body = body;
+     }
+
+     String getName() { return name; }
+
+     void print(int ind) {
+       Stmt.indent(ind);
+       System.out.print("procedure " + name + "(");
+       for (int i=0; i&lt;formals.length; i++) {
+         if (i&gt;0) {
+           System.out.print(", ");
+         }
+         System.out.print(formals[i]);
+       }
+       System.out.println(") {");
+
+       body.print(ind+2);
+
+       Stmt.indent(ind);
+       System.out.println("}");
+     }
+   }
+</pre>
+<p>The code should still compile (again, we don't expect a change
+in behavior yet, but it's nice to know we haven't broken
+things).</p>
+
+<!-- Step 5 -->
+</li><li><p>It's time to extend the abstract syntax for programs to
+allow each one to include a collection of procedure
+definitions.</p>
+<ul>
+<li><p>Change the code at the start of the <tt>Program</tt> class
+to define two fields (adding <tt>procs</tt> to the <tt>body</tt>
+field that is already there):</p>
+<pre>    private Proc[] procs;
+    private Stmt body;
+
+    Program(Proc[] procs, Stmt body) {
+      this.procs = procs; this.body = body;
+    }
+
+    Program(Stmt body) {
+      this(new Proc[] {}, body);
+    }
+</pre>
+<p>Note that the second constructor gives us a simple way to build
+program values that don't include any procedure definitions.  In
+particular, this means that all of our current <tt>Main</tt>
+programs should continue to compile and run as before.  Go on, try
+it.  You know you want to!</p>
+</li></ul>
+
+<!-- Step 6 -->
+</li><li><p>You probably also want to change the <tt>print()</tt>
+method in the <tt>Program</tt> class so that it will print each of
+the procedure definitions out for you, if there are any.  This
+just requires a simple loop over the elements of the
+<tt>procs</tt> array; you can use the <tt>print()</tt> method
+from the <tt>Proc</tt> class to do the work of printing out an
+individual procedure definition.</p>
+
+<!-- Step 4 -->
+</li><li><p>Now let's add the abstract syntax for procedure calls, each
+of which is just a special kind of statement that specifies the
+name of the procedure to be called and a list of expression
+arguments (the "actual" parameters):</p>
+<pre>   class Call extends Stmt {
+     private String name;
+     private Expr[] actuals;
+     Call(String name, Expr[] actuals) {
+       this.name = name; this.actuals = actuals;
+     }
+
+     Env exec(Program prog, Env env) {
+       prog.call(env, name, actuals);
+       return env;
+     }
+
+     void print(int ind) {
+       indent(ind);
+       // TODO: fill this in if you want to see calls in the output!
+     }
+   }
+</pre>
+
+<!-- Step 8 -->
+</li><li><p>You might have noticed that the <tt>exec()</tt> method for
+<tt>Call</tt> in the code above is assuming that we've added a
+<tt>call()</tt> method to the <tt>Program</tt> class.  This will
+be used to look up the implementation of the named procedure.
+Something like the following should do the trick:</p>
+<pre>  void call(Env env, String name, Expr[] actuals) {
+    for (int i=0; i&lt;procs.length; i++) {
+      if (name.equals(procs[i].getName())) {
+        procs[i].call(this, env, actuals);
+        return;
+      }
+    }
+    System.out.println("ABORT: Cannot find function " + name);
+    System.exit(1);
+  }
+</pre>
+
+<!-- Step 9 -->
+</li><li><p>Once again, the code that we've just added is pushing off some work
+to another method.  This time, once we've found a procedure with the
+right name, we're invoking the <tt>call()</tt> method for that procedure.  This
+will check that we have the right number of parameters, build an
+environment that associates the actual parameter values with each of
+the formal parameters, and then run the body.  But we haven't written
+the code to do that yet ... a problem that is easily fixed:</p>
+<pre>  // This goes in the Proc class:
+  void call(Program prog, Env env, Expr[] actuals) {
+    if (actuals.length!=formals.length) {
+      System.out.println("ABORT: Wrong number of arguments for " + name);
+      System.exit(1);
+    }
+    Env newenv = null;
+    for (int i=0; i&lt;actuals.length; i++) {
+      newenv = new Env(formals[i], actuals[i].eval(env), newenv);
+    }
+    body.exec(prog, newenv);
+  }
+</pre>
+<p>Assuming you added this code in the right place, everything should
+compile and run, just as before.</p>
+
+<!-- Step 10 -->
+</li><li><p>Double digits, woot!  Let's celebrate by pulling in a copy of
+a program that actually includes some procedure definitions.  Be
+sure to look at the code so that you can see the details of what
+the full abstract syntax looks like now:</p>
+<pre>   cp ../extras/MainProc.java .
+   javac *.java
+   java MainProc
+</pre>
+
+<!-- Step 11 -->
+</li><li><p>Another snapshot already?</p>
+<pre>   mkdir Proc
+   cp *.java Proc
+</pre>
+<p>And it's time to press on ...</p>
+</li></ol>
+
+<hr>
+<!-- Ref ------------------------------------------------------------ -->
+<h1><a name="ref">Ref: Call-by-Reference</a> (<a href="http://web.cecs.pdx.edu/~mpj/cs322/interpretour/#" onclick="Video=window.open(&#39;ref.html&#39;,&#39;Video&#39;,&#39;toolbar=no,location=no,directories=no,scrollbars=no,resizable=no,width=660,height=380&#39;); return false;">video - 18:48</a>)</h1>
+<!-- <p align=center>
+<iframe width="640" height="360" src="//www.youtube.com/embed/bETJ_PWxgLw?rel=0" frameborder="0" allowfullscreen></iframe>
+</p> -->
+<p>Our next step will be to extend the interpreter to allow parameter
+passing "by reference".  Normally, when you call a procedure, you pass
+(a copy of) the <em>value</em> of each argument; this is widely referred to as
+"<em>call-by-value</em>".  For example, in a sequence of code like the following:</p>
+<pre>  var x = 2;
+  foo(x)
+  print x;
+</pre>
+<p>you would expect that the procedure foo would get its own copy of the
+variable x, that it can freely modify without changing the value in
+the caller's variable of the same name.  With "<em>call-by-reference</em>", the
+procedure definition specifies that the caller must pass a <em>reference</em>
+to the argument, essentially pointing at where the argument's value is
+stored rather than passing the value itself.  This means that the
+procedure that is being called does now have the ability to change
+the value in the caller's variable.</p>
+
+<p>One way to indicate this by adding a "<tt>ref</tt>" keyword in front of the
+formal parameters in a procedure's definition.  For example, suppose
+that the <tt>foo()</tt> procedure used above were defined as follows:</p>
+<pre>  procedure foo(ref y) {
+    y = y + 1;
+  }
+</pre>
+<p>Now, if we run the sample program at the top of this section, the call
+to <tt>foo(x)</tt> will pass a reference to the caller's variable <tt>x</tt> as its
+argument to the procedure.  As such, inside the body of <tt>foo()</tt>, the
+variable <tt>y</tt> now holds a reference to the caller's <tt>x</tt> variable and when
+the interpreter executes the statement <tt>y = y + 1</tt>, it will actually have
+the effect of executing the caller's variable <tt>x</tt>.  This means that the
+original program fragment will now print out the value <tt>3</tt> instead of the
+value <tt>2</tt> that you might have expected.</p>
+
+<p>Call-by-reference has a number of useful applications.  One that might
+be important to us here is that it gives us a way to return a value
+(or possibly more than one, if we have multiple call-by-reference
+parameters) from a procedure, simply by assigning to the corresponding
+variable inside the procedure body.</p>
+
+<ol>
+<!-- Step 1 -->
+<li>You might not be surprised to see that we'll start with clean up:
+<pre>   rm *.class
+</pre>
+</li>
+
+<!-- Step 2 -->
+<li><p>In a language with support for call-by-reference, we'll have some
+variables that hold values, and some variables that hold references
+to other variables.  Remember that the values of variables are stored
+in environment structures.  Now that we have two kinds of variable,
+we're going to need two kinds of environment entry.</p>
+
+<p>So let's get started by switching over to <tt>Env.java</tt>.</p>
+
+<ul>
+<li><p>Mark the definition of the <tt>Env</tt> class as
+<tt>abstract</tt>:  We're going to use different subclasses
+(<tt>ValEnv</tt> and <tt>RefEnv</tt>) for each of the two kinds of
+variables in our programs, but <tt>Env</tt> will still be our
+foundation.</p></li>
+
+<li><p>Move the <tt>Value val</tt> field out of the <tt>Env</tt>
+class, and remove it from the constructor for <tt>Env</tt>; only
+<tt>ValEnv</tt> objects will have an associated <tt>Value</tt>
+field from this point on.</p></li>
+
+<li><p>Create a new <tt>ValEnv</tt> class (it can also be part of
+<tt>Env.java</tt>) that looks something like the following:</p>
+<pre>  class ValEnv extends Env {
+    private Value val;
+
+    ValEnv(String var, Value val, Env rest) {
+      super(var, rest);
+      this.val = val;
+    }
+   }
+</pre></li>
+
+<li><p>Move the definitions of <tt>getValue()</tt> and
+<tt>setValue()</tt> out of <tt>Env</tt> and in to <tt>ValEnv</tt>.
+And then add <tt>abstract</tt> definitions for these methods in
+the original <tt>Env</tt> class (i.e., with the keyword
+<tt>abstract</tt> at the start of the line, and with a
+"<tt>;</tt>" instead of an implementation.</p></li>
+
+<li><p>If you like, you can try compiling the program at this
+point.  However, you'll need to find the two <tt>new
+Env(...)</tt> calls in <tt>Src.java</tt> and replace them with
+<tt>new ValEnv()</tt> calls before that will work.</p></li>
+
+<li><p>Now, back in <tt>Env.java</tt>, let's create a second kind
+of environment entry for variables that are references to other
+variables.  In other words, instead of containing a
+<tt>Value</tt>, these environment entries will contain a
+<tt>ref</tt>, which is actually just a pointer to another
+<tt>Env</tt>.  And when somebody tries to get or set the value of
+a <tt>RefEnv</tt> using the <tt>getValue()</tt> or
+<tt>setValue()</tt> methods, we'll translate these into calls for
+the corresponding methods of <tt>ref</tt>:</p>
+<pre>  class RefEnv extends Env {
+    private Env ref;
+
+    RefEnv(String var, Env ref, Env rest) {
+      super(var, rest);
+      this.ref = ref;
+    }
+
+    Value getValue() { return ref.getValue(); }
+
+    void  setValue(Value val) { ref.setValue(val); }
+  }
+</pre></li>
+
+<li><p>At this point, the code should all compile without errors
+(again, assuming you've replaced the <tt>new Env(...)</tt> calls
+with <tt>new ValEnv(...)</tt>, as described previously).</p></li>
+</ul>
+</li>
+
+<!-- Step 3 -->
+<li><p>Up to this point, we've been representing the formal
+parameters for each procedure by a simple <tt>String</tt> value.
+But now we're going to have two kinds of formal parameter, one for
+call-by-value parameters and one for call-by-reference.  As a
+result, we're going to need a richer abstract syntax for formal
+parameters.  Let's work on that!</p>
+
+<ul>
+<li><p>Add a new <tt>Formal</tt> class in <tt>Src.java</tt>.
+Given that it has a lot to do with procedures, you might want to
+put it close to the definition of <tt>Proc</tt>.  Of course,
+that's your choice :-)</p>
+<pre>  class Formal {
+    protected String name;
+
+    Formal(String name) {
+      this.name = name;
+    }
+
+    public String toString() {
+      return name;
+    }
+  }
+</pre></li>
+
+<li><p>Add a <tt>ByRef</tt> class in <tt>Src.java</tt>.  For simplicity, we'll just have
+this inherit from <tt>Formal</tt> for now.  The only real difference
+between <tt>Formal</tt> and <tt>ByRef</tt> at this stage is in how these are
+viewed as <t>String</t>s using the <tt>toString()</tt> method:</p>
+<pre>  class ByRef extends Formal {
+    ByRef(String name) { super(name); }
+
+    public String toString() {
+      return "ref " + name;
+    }
+  }
+</pre></li>
+
+<li><p>Now update the code in <tt>Proc</tt> to indicate that the formals are
+<tt>Formal</tt> values rather than <tt>String</tt> values.  For example, you
+will need to update references to <tt>String[]</tt> to say <tt>Formal[]</tt>
+instead.</p></li>
+
+<li><p>You will also need to update the code in <tt>MainProc.java</tt> to
+keep that working.  Replace <tt>String[]</tt> with <tt>Formal[]</tt>, and
+wrap each string name that is mentioned in a formal parameter
+list with a call to <tt>new Formal</tt>.  For example, the first
+line in the abstract syntax for the <tt>sum</tt> procedure should
+look like this after you've made the changes:</p>
+<pre>   new Proc("sum", new Formal[] {new Formal("n"), new Formal("a")},
+     ...
+</pre></li>
+
+<li><p>Unfortunately, the code won't quite compile correctly at this
+point.  But if you try, then <tt>javac</tt> should just report one
+error, and the line that is causing the problem should look
+something like the following:</p>
+<pre>   newenv = new ValEnv(formals[i], actuals[i].eval(env), newenv);
+</pre>
+<p>Just for now, comment that line out.  Now your code should at
+least compile.  But it won't run properly until we figure out
+what was wrong in that last line ...</p></li>
+</ul>
+</li>
+
+<!-- Step 4 -->
+<li><p>The problem we had in that last line is that <tt>formals[i]</tt> is
+now a value of type <tt>Formal</tt>, but the constructor for <tt>ValEnv</tt>
+requires a variable name (i.e., a <tt>String</tt>) in that spot.</p>
+
+<ul>
+<li><p>We don't have an easy way to access the <tt>String</tt> name for the
+formal parameter in the code above, but we can solve that by
+moving the <tt>new ValEnv()</tt> constructor into a method in the
+<tt>Formal</tt> class.  First, replace the line that caused the
+problem above with:</p>
+<pre>    newenv = formals[i].extend(env, actuals[i], newenv);
+</pre></li>
+
+<li><p>And now add a definition for <tt>extend()</tt> in the <tt>Formal</tt> class:</p>
+<pre>    Env extend(Env env, Expr expr, Env newenv) {
+      return new ValEnv(name, expr.eval(env), newenv);
+    }
+</pre>
+<p>Notice that we don't have a problem here in supplying the
+required <tt>name</tt> argument to the <tt>new ValEnv()</tt> call!</p>
+
+<p>And, just in case it isn't clear, we've chosen the name
+<tt>extend()</tt> for this method because it is being used to
+extend an environment with a new entry.</p></li>
+
+<li><p>The code should now compile.  Of course, it won't handle
+by reference parameters correctly yet, but it should let
+us run all the preceding examples just fine.</p></li>
+</ul>
+</li>
+
+<!-- Step 5 -->
+<li><p>To finish off the implementation, we just need to explain
+what should happen when we extend the environment for a
+<tt>ByRef</tt> parameter.  In particular, we're going to want to
+add something like the previous definition of <tt>extend()</tt> to
+the <tt>ByRef</tt> class, but it will need to return a new
+<tt>RefEnv</tt> instead of a new <tt>ValEnv</tt>.  And that in
+turn, will require us to do something with the second argument in
+the call, because <tt>expr.eval(env)</tt> returns a
+<tt>Value</tt>, but the constructor for <tt>RefEnv</tt> requires
+an <tt>Env</tt> in that position.</p>
+
+<p>The trick that we need here is to define a new version of <tt>eval()</tt>
+that returns a reference instead of a value ...</p>
+<ul>
+<li><p>The code for evaluating a <tt>Var</tt>iable to produce a
+value just looks for the variable name in the environment and then
+extracts the associated value using <tt>getValue()</tt>:  (This
+definition should already be in your version of <tt>Src.java</tt>;
+you don't need to add it!)</p>
+<pre>  Value eval(Program prog, Env env) {
+    return Env.lookup(env, name).getValue();
+  }
+</pre>
+<p>If we want to return a reference instead, just drop the <tt>getValue()</tt>
+call from the end: (Note that I've used a different name for this
+method, which should be added to the <tt>Var</tt> class.)</p>
+<pre>  Env evalRef(Env env) {
+    // Return a reference to this variable:
+    return Env.lookup(env, name);
+  }
+</pre></li>
+
+<li><p>That last step only lets us find a reference when the expression
+we're interested in is a variable.  But what if the parameter that is
+passed in is actually a different kind of expression?  For example,
+how can we pass a reference to an expression like "<tt>6*7</tt>"?  The
+answer is that we can evaluate the expression as normal, save the
+result in a <em>new</em> <tt>ValEnv</tt> entry, and then just return that as our
+reference.  To capture this, add something like the following to
+the code in <tt>Expr</tt>:</p>
+<pre>  Env evalRef(Env env) {
+    // Store the expression in a new ValEnv and return
+    // that as the reference:
+    return new ValEnv("", eval(env), null);
+  }
+</pre>
+<p>The variable name doesn't matter in this case (nobody will ever
+use it), which is why I've chosen <tt>""</tt> here.  Note that this
+definition will now be used for all expressions, except variables,
+so we don't have to add any further implementations of <tt>evalRef()</tt>.</p></li>
+
+<li><p>Now, at last, we can add an appropriate definition for <tt>extend()</tt> in
+the <tt>ByRef</tt> class.  Evaluate the expression to produce a reference
+(i.e., using <tt>evalRef()</tt>) and then wrap the result up as a <tt>RefEnv</tt>
+(i.e., using <tt>new RefEnv()</tt>):</p>
+<pre>    Env extend(Env env, Expr expr, Env newenv) {
+      return new RefEnv(name, expr.evalRef(env), newenv);
+    }
+</pre></li>
+</ul>
+</li>
+
+<!-- Step 6 -->
+<li><p>Pause for breath!  Everything should compile now, and work as
+expected.  If you like, you can now modify some of your <tt>Main</tt> programs
+to include definitions that take by-reference parameters.  Or you
+can use one of ours instead:</p>
+<pre>   cp ../extras/MainRef.java .
+   javac *.java
+   java MainRef
+</pre>
+<p>Does this give the results you expect?  The answer should be yes
+(the program should output two numbers, 50 and 26), but you may need
+to trace the program quite carefully to confirm that this is indeed
+the correct result.  (And if you're seeing different results, then
+retrace your steps to make sure you didn't leave something out ...)</p>
+</li>
+
+<!-- Step 7 -->
+<li><p>Everybody smile, it's time for another snapshot!</p>
+<pre>   mkdir Ref
+   cp *.java Ref
+</pre>
+</li>
+</ol>
+
+<hr>
+<!-- FCF ------------------------------------------------------------ -->
+<h1><a name="fcf">FCF: First-Class Functions</a> (<a href="http://web.cecs.pdx.edu/~mpj/cs322/interpretour/#" onclick="Video=window.open(&#39;fcf.html&#39;,&#39;Video&#39;,&#39;toolbar=no,location=no,directories=no,scrollbars=no,resizable=no,width=660,height=380&#39;); return false;">video - 13:25</a>)</h1>
+<!-- <p align=center>
+<iframe width="640" height="360" src="//www.youtube.com/embed/bETJ_PWxgLw?rel=0" frameborder="0" allowfullscreen></iframe>
+</p> -->
+
+<p>One last variant: We're going to extend our interpreter with
+support for <em>"first-class functions"</em>.  This is a
+feature you might traditionally associate with functional
+languages like Haskell and ML, although it also becoming quite
+popular in other languages too now, from Javascript to C++ and
+Python.  The idea here is that we can create function values that
+can then be assigned to variables and passed as arguments to
+functions or procedures.  When we write these things down in a
+concrete syntax, we'll use the notation "<tt>\x -&gt; expr</tt>"
+for a function (sometimes called a
+<em>"lambda expression"</em>) that takes an argument
+<tt>x</tt> and returns the value of the specified <t>expr</t>, and
+we'll write "<tt>f @ x</tt>" for the result obtained by
+calling the function <tt>f</tt> with parameter value <tt>x</tt>.
+That said, in our code, we'll only be worrying about abstract
+syntax, and we'll use the class names <tt>Lambda</tt> and
+<tt>Apply</tt> for these two constructs.</p>
+
+<p>Although this is a fairly advanced language feature, it is
+actually one of the simplest to implement given the machinery we
+have already developed above!</p>
+
+<ol>
+<!-- Step 1 -->
+<li><p>Of course, we'll practice good hygiene and clean up before we begin:</p>
+<pre>    rm *.class
+</pre>
+</li>
+
+<!-- Step 2 -->
+<li><p>Now let's add a representation for function values as a new subclass of
+the <tt>Value</tt> class.  Every function value captures: the <tt>env</tt>ironment in which
+the function value was created (so that we can refer to its free variables);
+the name of the <tt>arg</tt>ument, and the expression that makes up the <tt>body</tt> of
+the function:</p>
+<pre>    class FValue extends Value {
+      private Env    env;
+      private String arg;
+      private Expr   body;
+
+      FValue(Env env, String arg, Expr body) {
+        this.env = env; this.arg = arg; this.body = body;
+      }
+
+      Value enter(Value val) {
+        return body.eval(new ValEnv(arg, val, env));
+      }
+
+      String show() {
+        return "&lt;function&gt;";
+      }
+    }
+</pre>
+<p>(As an aside, function values like this are often called <em>"closures"</em>.)</p>
+
+<p>Note that we've included a method called <tt>enter()</tt> to describe the
+result of invoking the function with a specific argument, <tt>val</tt>.
+(Again, we pick this name because this process is often referred
+to as <em>"entering a closure"</em>;.)  It is fairly easy to see how the
+function is evaluated.  First, we extend the environment with a
+new binding that associates the parameter name, <tt>arg</tt>, with the
+actual value passed in, <tt>val</tt>.  And then we just evaluate the <tt>body</tt>
+of the function using that extended environment.</p>
+
+<p>Everything should still compile once you've made the change above.</p>
+</li>
+
+<!-- Step 3 -->
+<li><p>It doesn't make sense to enter values that are not functions,
+so let's add a version of the <tt>enter()</tt> method in the <tt>Value</tt> class
+so that this will be treated as a (run-time) error:</p>
+<pre>    Value enter(Value val) {
+      System.out.println("ABORT: First-class function expected");
+      System.exit(1);
+      return null;   // Not reached
+    }
+</pre>
+<p>Once again, everything should still compile after this change.</p>
+</li>
+
+<!-- Step 4 -->
+<li><p>Now let's add an abstract syntax representation for lambda
+expressions.  It's surprisingly simple:</p>
+<pre>    class Lambda extends Expr {
+      private String var;
+      private Expr   body;
+      Lambda(String var, Expr body) { this.var = var; this.body = body; }
+
+      Value  eval(Env env) {
+        return new FValue(env, var, body);
+      }
+
+      String show() { return "(\\" + var + " -&gt; " + body.show() + ")"; }
+    }
+</pre>
+<p>And we still haven't done anything that will stop this from compiling,
+so perhaps you should just check that now ...</p>
+</li>
+
+<!-- Step 5 -->
+<li><p>Function application isn't much harder either.  To evaluate an
+expression of the form <tt>f @ x</tt>, we're just going to need to evaluate
+<tt>f</tt>, which should produce an <tt>FValue</tt> that we can enter using the value
+of <tt>x</tt> as the argument.</p>
+<pre>    class Apply extends Expr {
+      private Expr fun, arg;
+      Apply(Expr fun, Expr arg) { this.fun = fun; this.arg = arg; }
+
+      Value  eval(Env env) {
+        return fun.eval(env).enter(arg.eval(env));
+      }
+
+      String show() { return "(" + fun.show() + " @ " + arg.show() + ")"; }
+    }
+</pre>
+<p>Everything should still compile!</p>
+</li>
+
+<!-- Step 6 -->
+<li><p>Time for some testing.  As before, you can write your own, or use
+ours as a starting point.</p>
+<pre>   cp ../extras/MainFCF.java .
+   javac *.java
+   java MainFCF
+</pre>
+<p>We've sailed through this set of extensions fairly quickly, so be
+sure you understand how this works.</p>
+</li>
+
+<!-- Step 7 -->
+<li><p>One last snapshot, and then we can call it a day!</p>
+<pre>   mkdir FCF
+   cp *.java FCF
+   rm *.class
+</pre>
+</li>
+</ol>
+
+<!-- Main material ends here-->
+</td>
+</tr>
+</tbody></table>
+<hr>
+<p>I hope that you had fun and enjoyed your interpretour!</p>
+<hr>
+
+
+
+</body></html>

@@ -1,0 +1,81 @@
+------------------------------------------------------------------
+The materials in this folder are designed to serve two primary
+purposes:
+
+- To address Course Learning Objective 9: "Implement an
+  interpreter for a simple but realistic language."
+
+- To provide a review of (or introduction to) the front end
+  implementation that was developed during CS 321, including
+  syntax and static analysis.  This review is necessary because
+  the front end components will be used for one or more graded
+  assignments in later weeks to address Course Learning Objective
+  10: "Implement a code generator for a simple but realistic
+  language, producing native code for a real machine."
+
+Outline/study plan:
+===================
+
+Abstract syntax:
+----------------
+Review 0-AST-Notes.txt and the code in the AST folder.  Look at
+examples from ast/* to review typical layout and structure.  View,
+compile ("make") and run Main ("java Main"), explaining format of
+output generated.
+
+Syntax analysis:
+----------------
+Review 1-Parser-Notes.txt and the code in the Parser folder.
+Review Parser.jj.  Compile and run Parser on test?.prog files,
+reflecting on output.
+
+Static analysis:
+----------------
+Review 2-Static-Notes.txt and the code in the Static folder.
+Compile and run Static on test?.prog files, commenting on
+annotations that appear in generated output.  Consider review of
+specific implementations (e.g., matchTypes, ArithBinExpr, etc...)
+
+... transition from review to new material at this point ...
+
+Static analysis for Interpreter:
+--------------------------------
+Review 3-Interp-Notes.txt, and discuss basic representation and
+implementation strategies, including globals and locals arrays,
+slot numbers, and frameSize.  Review sample outputs.  Review code
+in StaticInterp, highlighting additional code that calculates
+these new attributes. Illustrate the use of "diff -C 2 -r Static
+StaticInterp" to identify and walk through the changes that have
+been made.
+
+Interpreter:
+------------
+Move in to Interp.  Demonstrate the interpreter on a simple
+example.  Demonstrate "java Interp < test4.prog" and relate to
+path in AST.  Walk through examples for IntLit, Add, Eql, and
+Call.
+
+Exercise: replace stubs for eval() implementations with working
+code.  (Do not worry about floating point, so you can safely
+ignore the FloatLit, IntToDouble, and DoubleToInt classes.)
+Use a simple "void main() { print expr; }" form for testing.
+
+Walk through sample solutions.
+
+Return to code, discuss handling of statements.  Walk through
+examples for Return, Block, Print, and Locals.
+
+Exercise: replace stubs for exec() implementations with working
+code.  Use test?.prog examples for testing, as well as other
+examples devised specifically for the purpose.
+
+Walk through sample solutions.
+
+Stretch Exercise: upgrade interpreter to support floating point
+arithmetic.
+
+Identify sources of interpretive overhead, opportunities for
+improvement.  How would you handle call by reference?  (Single
+stack model) How would you handle first class functions?  
+
+------------------------------------------------------------------

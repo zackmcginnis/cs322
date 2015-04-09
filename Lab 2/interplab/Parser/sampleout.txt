@@ -1,0 +1,22 @@
+Globals
+  int
+  InitVarIntro
+    "x"
+    IntLit(1)
+Function
+  void
+  "main"
+  Block
+    While
+      Lt
+        Id("x")
+        IntLit(10)
+      Block
+        Print
+          Id("x")
+        ExprStmt
+          Assign
+            "x"
+            Add
+              Id("x")
+              IntLit(1)

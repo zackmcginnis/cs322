@@ -1,0 +1,9 @@
+// A little sample program, in concrete syntax
+double x = 1.0;
+
+void main() {
+    while (x < 10.0) {
+        print x;
+        x = x + 0.7;
+    }
+}

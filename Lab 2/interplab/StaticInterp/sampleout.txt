@@ -1,0 +1,22 @@
+Globals
+  int
+  InitVarIntro
+    "x", slot=-1
+    IntLit(1)
+Function
+  void
+  "main", frameSize=0
+  Block
+    While
+      Lt int
+        Id("x", slot=-1)
+        IntLit(10)
+      Block
+        Print int
+          Id("x", slot=-1)
+        ExprStmt
+          Assign int
+            "x", slot=-1
+            Add int
+              Id("x", slot=-1)
+              IntLit(1)

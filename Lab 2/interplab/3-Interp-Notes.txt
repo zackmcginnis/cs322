@@ -1,0 +1,275 @@
+Notes about the interpreter:
+============================
+Two of the key components in the implementation of the interpreter
+are:
+
+- An eval() method, declared as abstract in the Expr base class
+  with appropriate implementations in each subclass:
+
+    // In the Expr class:
+    public abstract int eval(int[] globals, int[] locals);
+
+- An exec() method, declared as abstract in the Stmt base class
+  with appropriate implementations in each subclass.
+
+    // In the Stmt class:
+    public abstract boolean exec(int[] globals, int[] locals);
+
+Both of these methods are parameterized by two array arguments that
+store the values of global and local variables, respectively.  The
+fact that we use int arrays here does not mean that our programs are
+restricted to working with integer values only.  Instead, it just
+reflects the fact that integer, floating point, and boolean values
+can all be represented by 32 bit int values, as described below.  In
+what follows, we will also explain how static analysis is used to
+calculate "slot" numbers for each variable reference that appears in
+a valid source program; these numbers can then be used when the
+program is being executed to distinguish between global and local
+variable references, and to determine the appropriate array indices
+in each case.
+
+The eval() method has a return type of int.  For example, if e is an
+expression, then e.eval(globals, locals) will return an int that
+represents the value of the expression given the values of the
+variables in globals and locals.
+
+The exec() method, on the other hand, has a return type of boolean.
+For example if s is a statement, then s.exec(globals, locals) will
+only return true if the statement executes a Return construct.  In
+all other cases, the exec() call will return false, indicating that
+execution should continue with whatever statement comes immediately
+after s.
+
+Representation of values:
+-------------------------
+Programs in this language can manipulate three different types of
+value: int, boolean, and double.  Values of all three types can be
+stored within a single, 32-bit int value:
+
+- Values of type int can represent themselves.
+
+- For values of type boolean:
+
+  We can represent false using the integer 0 and true using any
+  non-zero integer.  Functions for converting between booleans and
+  int values are provided by the static b2i and i2b methods in the
+  Expr class:
+
+   b2i(x)  returns an integer representation of the boolean x.
+
+   i2b(y)  returns the boolean corresponding to the integer x.
+
+- For values of type double: a double precision floating point
+  number requires 64 bits of storage.  For the purposes of this
+  interpreter, we will actually implement the type "double" using
+  single precision floating point numbers with representations that
+  do fit in a 32 bit word.  Specifically, the Java standard
+  libraries provide functions that allow a programmer to view the
+  int bit pattern corresponding to a given float value f by using:
+
+     Float.floatToRawIntBits(f)
+
+  For example, Float.floatToRawBits(1.0f) = 1065353216, which is
+  0x3F800000 in hex.  Note that this is very different from using
+  cast operations, which try to preserve values rather than
+  representations.  For example, (int)(1.0f) = 1.
+
+  Conversely, given a bit pattern as an int variable i, the
+  programmer can find the corresponding float value by using:
+
+     Float.intBitsToFloat(i)
+
+  For example, Float.intBitsToFloat(1065353216) = 1.0f.  The details
+  of which bit patterns correspond to which integers are specified
+  by the IEEE 754 standard for floating-point "single format" bit
+  layout.  Happily, we do not need to worry about those details
+  here.  All that matters for our purposes is that we can convert
+  back and forth between int and float representations and hence use
+  values of type int to store float values.
+
+Global variables:
+-----------------
+A program may contain some number of global variables.  We will
+allocate space for each of these variables in an array (which we
+will typically refer to by the name "globals" in the interpreter
+source code).  Each distinct global variable is assigned a distinct
+"slot" number during static analysis.  For global variables, all
+slot numbers are negative, the first global being allocated to slot
+-1, the next to -2, and so on.
+
+Local variables:
+----------------
+In addition to global variables, the body of a typical function has
+access to a collection of "local" variables that are only visible
+within that particular function body.  These include the parameters
+of the function as well as any variables that are introduced (using
+the Locals construct) within the body of the function.  We will
+allocate space for each of these variables in an array (which we
+will typically refer to by the name "locals" in the interpreter
+source code).  Once again, it is the role of static analysis to
+assign an appropriate "slot" number to each of the local variables
+within a function.  For locals, we use non-negative slot numbers, so
+if a function has two parameters, then they will be stored in slots
+0 and 1, with any variables that are introduced later in the
+function body being assigned slot numbers 2, 3, and so on.
+
+The decision to use negative slot numbers for global variables
+and non-negative values for locals makes it possible for the
+interpreter to determine which of the globals and locals arrays
+should be used to find the value of a particular variable.
+The following example (taken from the implementation of the Id
+class) illustrates this approach (and assumes that each Id has
+a "slot" field that has been set to the appropriate value during
+static analysis:
+
+    // From the Id class:
+    public int eval(int[] globals, int[] locals) {
+        return (slot>=0) ? locals[slot] : globals[-(slot+1)];
+    }
+
+It is also the responsibility of static analysis to calculate the
+total number of local variables that a given function will use.  We
+refer to this number as the "frameSize" for the function because the
+memory that is used to store the parameters and local variables is
+often referred to as the "frame" of the function.  In this
+interpreter, we will also use the very first slot of the frame
+(i.e., locals[0]) as a place to store the value that is returned
+when a function exits.  (Of course, this slot is not needed in void
+functions because they do not generate return values.)
+
+With the details above in mind, the process for evaluating a
+function call f(a1, ..., an) is as follows:
+
+- Find the frameSize for f and allocate a new int[] array
+  with that many entries in it.
+
+- Evaluate each of the argument expressions a1, ..., an,
+  storing the results in the newly allocated array.
+
+- Execute the body of the function f, passing the new frame
+  array as its "locals" argument.
+
+- When the function returns, it will have stored the return
+  value, if any, in the 0th position of the frame array.
+  The caller can then extract that value from the array and
+  use that as the result of the function call.
+
+This sequence of steps is captured in the call() method in the
+Function class:
+
+    // From the Function class:
+    public int call(Expr[] args, int[] globals, int[] locals) {
+        if (frameSize>0) {
+            int[] frame = new int[frameSize];
+            for (int i=0; i<args.length; i++) {
+                frame[i] = args[i].eval(globals, locals);
+            }
+            body.exec(globals, frame);
+            return frame[0];
+        }
+        body.exec(globals, null);
+        return 0;
+    }
+
+Note that this code also includes an optimization for the case where
+the frameSize of the function that is being called is zero; this is
+only possible for a void function that has no parameters or local
+variables, in which case we do not need to allocate a new array for
+locals and can just substitute the null pointer.  In that situation,
+we know, thanks to static analyis, that nothing in the body of the
+statment will attempt to look for or store a value in the locals
+array.
+
+It is also informative to review the implementation of exec() for
+Return statements:
+
+    // From the Return class:
+    public boolean exec(int[] globals, int[] locals) {
+        if (exp!=null) {
+            locals[0] = exp.eval(globals, locals);
+        }
+        return true;
+    }
+
+The first group of statements here deal with the case when a
+return expression has been supplied, in which case we evaluate
+that expression using the current values of globals and locals
+and same the result at the start of the frame.  The last line
+returns true, indicating to the caller that a return has been
+executed.  This boolean results is useful in situations like
+the following:
+
+    // From the Block class:
+    public boolean exec(int[] globals, int[] locals) {
+        for (int i=0; i<body.length; i++) {
+            if (body[i].exec(globals, locals)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+In the body of the for(...) loop here, the result of executing
+body[i] is used to determine whether we should immediately
+exit the current block, ignoring any later statements in the
+block.  If, however, we reach the end of the block without
+having encountered a return statement, then exec() returns
+false as its result, indicating that execution should continue
+with whatever statement comes next.
+
+Using type information:
+-----------------------
+We have seen how slot numbers and frameSize values computed
+during static analysis can be put to use in the interpreter.
+In addition, there are also places where type information,
+captured as part of the type checking portion of static
+analyis, is needed to ensure the appropriate semantics.
+One example if this is in the code for printing out a value,
+which uses a test on the type field to determine whether the
+result of the print expression should be interpreted as a
+boolean or as an integer:
+
+    // From the Print class:
+    public boolean exec(int[] globals, int[] locals) {
+        int result = exp.eval(globals, locals);
+        if (type.equals(Type.BOOLEAN)) {
+            System.out.println(Expr.i2b(result));
+        } else {
+            System.out.println(result);
+        }
+        return false;
+    }
+
+What is missing?
+----------------
+The supplied code for the interpreter includes implementations of
+eval() for the following classes:
+
+   Id, IntLit, Add, Neq, Eql, and Call
+
+but it only provides stubs for the remaining Expr subclasses:
+
+   Sub, Mul, Div, Lt, Lte, Gt, Gte, LAnd, LOr, and Assign.
+
+There are also stubs for the following Expr subclasses, that would
+need to be completed (along with changes in other classes) if you
+were to add support for floating point numbers:
+
+   FloatLit, IntToDouble, and DoubleToInt
+
+Similarly, there are complete implementations of exec() for each
+of the following classes:
+
+   Block, Print, Return, and Locals
+
+but only stubs for:
+
+   Empty, While, If, and ExprStmt.
+
+Beyond these gaps, the interpreter does not attempt to handle
+floating point calculations correctly.  To do this, for example,
+it would be necessary for the implementations of eval() for basic
+arithmetic classes (Add, Sub, Mul, and Div) to provide separate
+cases for integer or floating point arithmetic, as determined by
+the type field in each case.
+

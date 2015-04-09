@@ -1,0 +1,174 @@
+------------------------------------------------------------------
+Here are labels and brief descriptions for all of the properties
+that are checked during static analysis.  The labels are reported
+in error messages if one or more of these properties is violated
+in the input source code.
+
+MainDefined
+  Every program should contain a definition of a function called
+  main.
+
+MainVoid
+  The main function should have void return type.
+
+MainNoParameters
+  The main function should not have any formal parameters.
+
+FunctionNamesUnique
+  A program cannot contain two functions with the same name.  [But
+  it is permitted for a function to have the same name as a global
+  variable defined elsewhere in the same program: we say that "the
+  namespaces for functions and globals are disjoint".]
+
+FormalsUnique
+  The list of formal parameters in a function declaration cannot
+  contain two variables with the same name.
+
+GlobalsUnique
+  A program cannot contain two global variables with the same
+  name.
+
+GlobalsInitialized
+  Every variable introduced in a global variable declaration must
+  specify an initializer expression.  [This condition could have
+  been enforced by the parser, but we will implement it as part of
+  static analysis instead.]
+
+GlobalsNoCalls
+  The initializer expression in a global variable declaration must
+  not include any function calls.  [We want to avoid situations in
+  which the called function could access a global variable that
+  has not yet been initialized.]
+
+IfBoolean
+  The test expression in an "if" statement must have type boolean.
+
+WhileBoolean
+  The test expression in a "while" statement must have type
+  boolean.
+
+PrintArgument
+  The expression in a print statement can have any type (int,
+  double, or boolean).
+
+ReturnValueRequired
+  Return statements of the form "return;" (i.e., without an
+  expression specifying a return value) are not allowed in the
+  body of functions that have a non-void return type.
+
+ReturnVoidRequired
+  Return statements of the form "return e;" (i.e., with an
+  expression specifying a return value) are not allowed in the
+  body of functions that have a void return type.
+
+ReturnType
+  If a "return e;" statement appears in the body of a function
+  with a non-void return type, then the type of e must match the
+  return type of the function.  Note, however, that it is
+  permitted to return a value of type int in a function
+  with return type double, or to return a value of type double
+  in a function with return type double.
+
+MustReturn
+  There should not be any way to reach the end of the body of a
+  non-void function without encountering a return statement.
+
+InitVarEntryType
+  The type of the expression in an initializer in either a local
+  or global declaration should match the type of the variable that
+  is being defined.  As in previous cases, however, an expression
+  of type int or double may be used in places where an expression
+  of double or int, respectively, is expected.  In these cases,
+  the expectation is that the value produced by the initializer
+  expression will be cast to match the type of the variable that
+  is being initialized.
+
+LocalsUnique
+  A local variable declaration cannot contain two variables with
+  the same name.  [But it is permitted for a local variable
+  declaration to use a variable name that has previously been
+  introduced in the same function, either as a parameter name or
+  in a separate local variable declaration, effectively hiding the
+  earlier definition of that name.]
+
+VarDefined
+  Any variable name that is used in a program, including any use
+  on the left hand side of an assignment, must have an associated
+  definition, either in a preceding local declaration or parameter
+  list, or in a global declaration.  Any variable that is
+  mentioned in the initializer portion of a global variable
+  declaration must have been defined in an earlier global variable
+  declaration.  (Either earlier in the same list of variable
+  introductions, or in a separate globals declaration earlier in
+  the program.)
+
+  [Note that it is permitted to reference a global variable in the
+  body of a function, even if the declaration of that global
+  variable appears after the definition of the function in the
+  source program.]
+
+ArithBinArgsNumeric
+  The arguments of an arithmetic operator (+, -, *, or /) must
+  both be of numeric type (int or double).  If the arguments are
+  of the same type, then the result will also have that same type.
+  If one of the arguments has type int and the other has type
+  double, then the return type will be double.
+
+RelBinArgs:
+  The relational operators (<, <=, >, >=, ==, or !=) can be used
+  to compare values of any type (i.e., int, double, or boolean).
+  It is permitted to use one argument of type int and the other
+  of type double.  In this situation, the argument of type int
+  will be converted to a double and a floating point comparison
+  operation will be performed at runtime.
+
+LogBinArgsBoolean
+  The arguments of a logical operator (&& or ||) must be of type
+  boolean.  [And the result of using any such operator will be a
+  value of type boolean.]
+
+AssignTypes
+  The type of the expression on the right hand side of an
+  assignment must match the type of the variable that is named on
+  the left hand side.  However, this rule should be relaxed for
+  assignments involving a mixture of numeric types (i.e., an int
+  on one side of the "=" symbol and a double on the other).  In
+  these cases, the value that is produced by the expression on
+  the right hand side of the assign will be converted to match
+  the type of the variable on the left hand side.
+
+CastInt
+  The argument in an IntToDouble cast must be of type int and the
+  result of the cast will be of type double.  (See below for a
+  description of casts.)
+
+CastDouble
+  The argument in a DoubleToInt cast must be of type double and
+  the result of the cast will be of type int.  (See below for a
+  description of casts.)
+
+FunctionDefined
+  Every function that is named in a function call should have a
+  definition in the program.
+
+CallReturnType
+  A function that has return type void should not be called in a
+  context where a value is expected.  (i.e., void functions can
+  only be called from within a statement expression.)
+
+CallNumberOfArgs
+  The number of arguments in a call to a function f must be the
+  same as the number of formal parameters in the definition of f.
+
+FormalTypeMismatch
+  The type of each argument in a function call must match the type
+  of the corresponding formal parameter in the definition of the
+  function.  Note, however, that an expression of type int may be
+  used as an argument where a formal parameter of type double is
+  specified.  Similarly, an expression of type double may be used
+  as an argument where a formal parameter of type int is
+  specified.  In these cases, appropriate casts will be used to
+  convert the actual arguments that are specified in the call
+  to match the types of the corresponding formal parameters.
+
+------------------------------------------------------------------

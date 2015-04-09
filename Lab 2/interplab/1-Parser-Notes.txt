@@ -1,0 +1,83 @@
+The following notes summarize the grammar and lexical structure of
+the sample programming language.
+
+--- Programs ----------------------------------------------------------
+
+Program    ::= Defn*
+Defn       ::= Globals | Function
+Globals    ::= Type VarIntros ";"
+Type       ::= "int" | "double" | "boolean"
+Function   ::= RetType IDENT "(" Formals? ")" Block
+RetType    ::= Type | "void"
+Formals    ::= Formal ("," Formal)* 
+Formal     ::= Type IDENT
+
+--- Statements --------------------------------------------------------
+
+Stmt       ::= ";"
+             | Block
+             | "if" "(" Expr ")" Stmt ("else" Stmt)?
+             | "while" "(" Expr ")" Stmt
+             | "print" Expr ";"
+             | "return" (Expr)? ";"
+             | ExprStmt ";"
+             | Locals
+ 
+Block      ::= "{" Stmt* "}"
+ExprStmt   ::= Assignment | Call
+Locals     ::= Type VarIntros ";"
+VarIntros  ::= VarIntro ("," VarIntro)*
+VarIntro   ::= IDENT ("=" Expr)?
+
+--- Expressions -------------------------------------------------------
+
+The set of expressions in our language is built from identifiers
+and integer literals using a set of operators whose precedence is
+captured by the following table.
+
+  =                     Assignment, groups to the right
+  ||                    Logical or, groups to the right
+  &&                    Logical and, groups to the right
+  <, <=, >, >=, ==, !=  Comparison operators, nonassociative
+  +, -                  Additive operators, group to the left
+  *, /                  Multiplicative operators, group to the left
+  parentheses           Used to specify explicit order of operations
+
+A suitable grammar for expressions, capturing the above fixity
+details, is as follows:
+
+Expr       ::= Assignment | LOr
+Assignment ::= IDENT "=" Expr
+LOr        ::= LAnd ("||" LOr)?
+LAnd       ::= Comp ("&&" LAnd)?
+Comp       ::= Sum (("<"|"<="|">"|">="|"=="|"!=") Sum)?
+Sum        ::= Prod (("+" | "-") Prod)*
+Prod       ::= Atom (("*" | "/") Atom)*
+Atom       ::= "(" Expr ")" | Call| IDENT | INTLIT | FLOATLIT
+Call       ::= IDENT "(" Args? ")"
+Args       ::= Expr ("," Expr)*
+
+--- Lexical Rules -----------------------------------------------------
+
+Spaces, tabs, new lines and carriage returns are treated as
+whitespace and can be used to separate or arrange lexemes (using
+indentation, for example) as appropriate.  C++/Java-style comments
+are supported, including both one line comments (introduced by
+"//") and non-nesting, bracketed comments (that begin with "/*"
+and then end at the first "*/").
+
+Identifiers (IDENT) should start with an alphabetic character
+(i.e., a-z), either upper or lower case, followed by a sequence of
+zero or more alphanumeric characters (i.e., either letters or
+digits 0-9).
+
+Integer literals (INTLIT) are written using a sequence of digits
+and are always interpreted in decimal notation.  (For example: 10,
+010, and 0010, are all interpreted as representing the number
+ten.)
+
+Floating point literals (FLOATLIT) are written as two nonempty
+sequences of digits with a period between them.  (For example,
+1.0, 3.14, and 21.34 are all valid floating point literals.)
+
+-----------------------------------------------------------------------
