@@ -1,0 +1,177 @@
+//----------------------------------------------------------------------------
+// This file provides a javacc implementation of a parser for the core
+// Interpretour language.
+//
+// You are welcome to use this code to help in testing your solutions to the
+// Homework 1 exercises, but this is not required.  (And you should be aware
+// that the parser has only been lightly tested and may have bugs; please let
+// me know if you find any!)
+//
+// The parser is implemented using the javacc tool that you have seen in CS 321
+// and can be built an executed as follows (assuming that this file, Parser.jj,
+// is included in the same directory as all of the other files---such as
+// Src.java---and that you have working versions of javacc and javac, as on the
+// Linuxlab):
+//
+//    $ javacc Parser.jj
+//    $ javac  *.java
+//
+// To run the parser on input stored in a file called prog.src, use:
+//    $ java Parser < prog.src
+//
+// If you prefer, you can type your code in directly at the command prompt
+// (press Enter and then ^D, at least on a Unix machine, to signal the end
+// of the input file).  In the following example, I typed all of the code for
+// a program on one line, hit Enter, then ^D, and then the Parser took over,
+// producing a pretty-printed version of the code listing before running the
+// same program:
+//
+//    $ java Parser
+//    i = 0; t = 0; while (i<10) { i = i + 1; t = t + i; } print t;
+//    Complete program is:
+//    i = 0;
+//    t = 0;
+//    while ((i < 10)) {
+//      i = (i + 1);
+//      t = (t + i);
+//    }
+//    print t;
+//    Running program:
+//    Output: 55
+//    Done!
+//    $ 
+//
+// [This sample output was produced before I folded in all of the code for
+// compiling the program to target code too, so you should get more output
+// if you run this example for yourself!]
+//
+// One problem here is that the separation of expressions into distinct
+// IExpr and BExpr types makes it hard to parse parenthesized expressions.
+// For example, an input that begins with a "(" may turn out to be an
+// IExpr like "(x+1)" or a BExpr like "(x<1)".  In general, distinguishing
+// between these two options could require arbitrary lookahead.  To avoid
+// that problem here, we will use regular parentheses, (...), for integer
+// expressions and square brackets, [...], for boolean expressions.  This
+// is a little bit ugly, but should be sufficient for current purposes.
+// For a more realistic language design, we would likely just have a single
+// expression type (like Expr in DT) and then either use dynamic typing or
+// else a static type system to separate booleans, integers, and any other
+// values of interest ...
+
+//-- Define a main program / entry point for the parser: ---------------------
+
+PARSER_BEGIN(Parser)
+public class Parser {
+  public static void main(String args[]) throws ParseException {
+    new Parser(System.in);  // Read from standard input
+    Stmt s = prog();
+
+    System.out.println("Complete program is:");
+    s.print(4);
+
+    System.out.println("Running on an empty memory:");
+    Memory mem = new Memory();
+    s.exec(mem);
+
+    System.out.println("Compiling:");
+    Program p     = new Program();
+    Block   entry = p.block(s.compile(p, new Stop()));
+    System.out.println("Entry point is at " + entry);
+    p.show();
+
+    System.out.println("Running on an empty memory:");
+    mem      = new Memory();
+    Block pc = entry;
+    while (pc!=null)  {
+      pc = pc.code().run(mem);
+    }
+
+    System.out.println("Done!");
+  }
+}
+PARSER_END(Parser)
+
+//-- Define the grammatical rules for programs: ------------------------------
+
+Stmt prog() : { Stmt prog; } {
+  prog=stmts() <EOF>
+  { return prog; }
+}
+
+//-- Define the grammatical rules for statements: ----------------------------
+
+Stmt block() : { Stmt s1; } {
+  "{" s1=stmts() "}"
+  { return s1; }
+}
+
+Stmt stmt() : { Token t; BExpr b; IExpr i; Stmt s1, s2; } {
+  s1=block()
+  { return s1; }
+
+| t=<IDENT> "=" i=iexpr() ";"
+  { return new Assign(t.image, i); }
+
+| "if" "(" b=bexpr() ")" s1=stmt() "else" s2=stmt()
+   { return new If(b, s1, s2); }
+
+| "while" "(" b=bexpr() ")" s1=stmt()
+   { return new While(b, s1); }
+
+| "print" i=iexpr() ";"
+   { return new Print(i); }
+}
+
+Stmt stmts() : { Stmt s1, s2; } { // one or more statements:
+  s1=stmt() [ s2=stmts() { s1=new Seq(s1,s2); } ]
+  { return s1; }
+}
+
+//-- Define the grammatical rules for expressions: ---------------------------
+
+BExpr bexpr() : { IExpr m, n; BExpr b; } {
+  (n=iexpr() ( ("<"  m=iexpr() { return new LT(n,m); })
+             | ("==" m=iexpr() { return new EqEq(n,m); })))
+
+| "[" b=bexpr() "]"
+   { return b; }
+}
+
+IExpr iexpr() : { IExpr m, n; } {
+  n=atom() ( ("+" m=atom() { n = new Plus(n,m); })
+           | ("-" m=atom() { n = new Minus(n,m); }))*
+  { return n; }
+}
+
+IExpr atom() : { IExpr i; Token t; } {
+  "(" i=iexpr() ")" { return i; }
+| "-" i=atom()      { return new UMin(i); }
+| t=<INTLIT>        { return new Int(Integer.parseInt(t.image)); }
+| t=<IDENT>         { return new Var(t.image); }
+}
+
+//-- Define the lexical structure of an input language: ----------------------
+
+// Input elements that should be ignored/skipped:
+SKIP : {
+  " "
+| "\t"
+| "\n"
+| "\r"
+| <"//" (~["\n","\r"])* ("\n" | "\r" | "\r\n")>
+| <"/*" (~["*"])* ("*" | ~["*","/"] (~["*"])* "*")* "/">
+}
+
+// Lexemes that should be reported as valid tokens:
+TOKEN : {
+  <INTLIT    : <ZERO> | <POSDIGIT> (<DIGIT>)*>
+| <#POSDIGIT : ["1"-"9"]>
+| <#ZERO     : "0">
+| <#DIGIT    : <ZERO> | <POSDIGIT> >
+}
+
+TOKEN : {
+  <IDENT : ["a"-"z"] (["a"-"z","A"-"Z","0"-"9","_"])*>
+}
+
+//----------------------------------------------------------------------------
