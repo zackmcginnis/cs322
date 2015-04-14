@@ -1,7 +1,0 @@
-i = 0;
-t = 0;
-while (i < 11) {
-  t = t + i;
-  i = i + 1;
-}
-print t;
