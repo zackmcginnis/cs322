@@ -50,6 +50,24 @@ class Plus extends IExpr {
   }
 }
 
+/*
+class Mult extends IExpr {
+  private IExpr l, r;
+  Plus(IExpr l, IExpr r) { this.l = l; this.r = r; }
+
+  int    eval(Memory mem) { return l.eval(mem) + r.eval(mem); }
+  String show() { return "(" + l.show() + " + " + r.show() + ")"; }
+
+  Code compileTo(Reg reg, Code next) {
+    Reg tmp = new Reg();
+    return l.compileTo(tmp,
+           r.compileTo(reg,
+           new Op(reg, tmp, '+', reg, next)));
+  }
+}
+*/
+
+
 class Minus extends IExpr {
   private IExpr l, r;
   Minus(IExpr l, IExpr r) { this.l = l; this.r = r; }
@@ -90,6 +108,40 @@ class LT extends BExpr {
   }
 }
 
+/*
+class Not extends BExpr {
+  private BExpr expr;
+  Not(BExpr expr) { this.expr = expr; }
+
+  bool    eval(Memory mem) { return expr.eval(mem); }
+  String show() { return "(" + expr.show() + " ! " + expr.show() + ")"; }
+
+  Code compileTo(Reg reg, Code next) {
+    Reg tmp = new Reg();
+    return l.compileTo(tmp,
+           r.compileTo(reg,
+           new Op(reg, tmp, '+', reg, next)));
+  }
+}
+*/
+
+/*
+class LTE extends BExpr {
+  private IExpr l, r;
+  LTE(IExpr l, IExpr r) { this.l = l; this.r = r; }
+
+  boolean   eval(Memory mem) { return l.eval(mem) + r.eval(mem); }
+  String show() { return "(" + l.show() + " <= " + r.show() + ")"; }
+
+  Code compileTo(Reg reg, Code next) {
+    Reg tmp = new Reg();
+    return l.compileTo(tmp,
+           r.compileTo(reg,
+           new Op(reg, tmp, '<=', reg, next)));
+  }
+}
+*/
+
 class EqEq extends BExpr {
   private IExpr l, r;
   EqEq(IExpr l, IExpr r) { this.l = l; this.r = r; }
@@ -104,6 +156,41 @@ class EqEq extends BExpr {
            new Op(reg, tmp, '=', reg, next)));
   }
 }
+
+/*
+class Even extends BExpr {
+  private IExpr expr;
+  Even(IExpr expr) { this.expr = expr; }
+
+  bool   eval(Memory mem) { return l.eval(mem) + r.eval(mem); }
+  String show() { return "(" + l.show() + " + " + r.show() + ")"; }
+
+  Code compileTo(Reg reg, Code next) {
+    Reg tmp = new Reg();
+    return l.compileTo(tmp,
+           r.compileTo(reg,
+           new Op(reg, tmp, '+', reg, next)));
+  }
+}
+*/
+
+/*
+class Halve extends BExpr {
+  private IExpr l, r;
+  Plus(IExpr l, IExpr r) { this.l = l; this.r = r; }
+
+  int    eval(Memory mem) { return l.eval(mem) + r.eval(mem); }
+  String show() { return "(" + l.show() + " + " + r.show() + ")"; }
+
+  Code compileTo(Reg reg, Code next) {
+    Reg tmp = new Reg();
+    return l.compileTo(tmp,
+           r.compileTo(reg,
+           new Op(reg, tmp, '+', reg, next)));
+  }
+}
+*/
+
 
 //____________________________________________________________________________
 // Stmt  ::= Seq Stmt Stmt
