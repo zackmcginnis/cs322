@@ -1,0 +1,236 @@
+------------------------------------------------------------------------
+x86-64 Assembly Language Programming Examples
+Mark P Jones, Portland State University
+------------------------------------------------------------------------
+
+This file describes some examples of x86-64 assembly language
+programming, all designed to be executed in a similar context to the
+programs that you'll be asked to write for Homework 2.  If you're not
+familiar with x86-64 assembly language programming, or even if you're
+just a bit rusty, then these examples should help to get you started,
+and also give you some ideas and programming tips.  The purpose of
+these examples is to build familiarity and confidence with the basics
+of programming in x86-64 assembly language.  Clarity and correctness
+are our primary goals.  In particular, we're not looking to demonstrate
+mastery of the full instruction set and we're not going to worry about
+performance or code size.
+
+In each of these examples, the goal is to write a fragment of x86-64
+code that takes the address of an array of (32 bit/4 byte) integers as
+its input in the rdi register and returns a result in the eax register.
+In each case, we will assume that the elements of the array are stored
+in successive locations in memory, each 4 bytes wide, with the first
+entry at the address that is provided in rdi.  We will also assume that
+the array is terminated with a zero and that it contains at least one
+element before that terminating zero is reached.
+
+More specifically, your goal in this lab will be to write assembly
+code programs for each of the following example tasks:
+
+Example 1: Return the length of the input array in %eax.
+
+Example 2: Return the largest number from the array in %eax.
+
+Example 3: Return the position of the largest number in the array
+           in %eax.
+
+Example 4: Return the average value of the numbers in the array using
+           integer division and ignoring any remainder.
+
+Example 5: Reverse the order of the elements in the array, without
+           using any additional storage.
+
+Example 6: Sort the elements in the array into increasing numerical
+           order, without using any additional storage.  (No algorithmic
+           sophistication should be expected here!)
+
+There are LOTS of different ways to write these programs.  Don't
+worry too much about coming up with the shortest or fastest possible
+code sequences, but try to keep things as clear and simple as you
+can.  (Taking time to include comments in your code can help a
+lot!)
+
+For testing purposes, I have provided a main.c program that runs the
+assembly language code on three examples and also shows the contents
+of the array before and after the call.  The latter is particularly
+useful for Examples 5 and 6 that modify the array but don't return a
+useful result.
+
+----------------------
+#include <stdio.h>
+
+extern int f(int*);
+
+void printArray(char* msg, int* a) {
+  for (; *a; ++a) {
+    printf("%s%d", msg, *a);
+    msg = ", ";
+  }
+  printf("\n");
+}
+
+int main() {
+  int a[] = { 5, 3, 6, 8, 2, 10, 11, 9, 1, 4, 7, 0 };
+  printArray("Before: ", a);
+  printf("first result is %d\n", f(a));
+  printArray("After: ", a);
+
+  int b[] = { 45, 23, 66, 18, 21, 10, 31, 75, 0 };
+  printArray("Before: ", b);
+  printf("second result is %d\n", f(b));
+  printArray("After: ", b);
+
+  int c[] = { -45, 23, -21, 10, 75, -90, 0 };
+  printArray("Before: ", c);
+  printf("third result is %d\n", f(c));
+  printArray("After: ", c);
+
+  printf("\n");
+  return 0;
+}
+
+----------------------
+There are 16 general purpose registers that can be used in x86-64 code.
+We adopt the conventions of the "System V Application Binary Interface
+(ABI)" for how these registers can be used in the code sequences that
+we write:
+
+ - The input parameter is in rdi.
+
+ - rsp holds the stack pointer and should not be used for other
+   purposes.
+
+ - If the code uses rbx, rbp, r12, r13, r14, or r15, then it MUST
+   restore them to their original values before it ends.  (One way
+   to accomplish this is to pushq the register value on to the stack
+   at the beginning of the code and then popq it off at the end.
+   Fortunately, there are plenty of registers for simple tasks, so we
+   won't need to do this too often; indeed, we won't need it at all
+   for these examples.)
+
+ - The code can freely use the following registers:
+     rax                      (return result)
+     rsi, rdx, rcx, r8, r9    (arguments 2-6)
+     r10, r11                 (caller saved)
+
+Also remember that each of the registers named above holds a 64
+bit value, which is appropriate when we're working with pointers or
+addresses or 64 bit integers.  For much of the work that we'll do
+here, however, we'll be using C integers, which are 32 bits wide.
+Fortunately, it is easy to use each of the general purpose registers
+(rax, rsi, rdx, rcx, etc.) as if they were 32 bit registers instead
+(eax, esi, edx, ecx, etc.).  In other words, we replace the "r"
+prefix on each 64 bit register name with an "e" to get the name of
+the corresponding 32 bit register.  Remember also that instructions
+producing 32 bit results typically add an "l" (for "long") suffix,
+while those producing 64 bit results typically add a "q" suffix.
+Thus, you will see instructions like "movl %eax,%edx" to copy the
+value from register eax into register edx, but an instruction like
+"movq %rdi,%rdx" is needed to copy the value from rdi into rdx.
+
+----------------------
+To get started on any one of the example programs:
+
+- Make a copy of the appropriate template (linux.s or mac.s) in
+  a file called exampleN.s, where N is the example number.
+
+- Edit the line at the top of the file to replace the name
+  "linux.s" or "mac.s" with the true filename, "exampleN.s".
+
+- Add your assembly language code into exampleN.s between the
+  lines that mark the section where your code should be inserted.
+  (This will replace the dummy code that just loads a value 42
+  into the eax register.)
+
+Now you can compile and run the resulting program using the
+following lines (again, replacing N with the appropriate example
+number):
+
+  gcc -o exampleN main.c exampleN.s
+  ./exampleN
+
+Alternatively, once you have implemented all of the examples,
+you can use the provide Makefile to compile and run all of the
+example programs using a simple make command:
+
+  prompt$ make
+  gcc -O -o example1 main.c example1.s
+  gcc -O -o example2 main.c example2.s
+  gcc -O -o example3 main.c example3.s
+  gcc -O -o example4 main.c example4.s
+  gcc -O -o example5 main.c example5.s
+  gcc -O -o example6 main.c example6.s
+
+  ./example1 "Length of Array"
+  Before: 5, 3, 6, 8, 2, 10, 11, 9, 1, 4, 7
+  first result is 11
+  After: 5, 3, 6, 8, 2, 10, 11, 9, 1, 4, 7
+  Before: 45, 23, 66, 18, 21, 10, 31, 75
+  second result is 8
+  After: 45, 23, 66, 18, 21, 10, 31, 75
+  Before: -45, 23, -21, 10, 75, -90
+  third result is 6
+  After: -45, 23, -21, 10, 75, -90
+  
+  ./example2 "Largest Number in Array"
+  Before: 5, 3, 6, 8, 2, 10, 11, 9, 1, 4, 7
+  first result is 11
+  After: 5, 3, 6, 8, 2, 10, 11, 9, 1, 4, 7
+  Before: 45, 23, 66, 18, 21, 10, 31, 75
+  second result is 75
+  After: 45, 23, 66, 18, 21, 10, 31, 75
+  Before: -45, 23, -21, 10, 75, -90
+  third result is 75
+  After: -45, 23, -21, 10, 75, -90
+  
+  ./example3 "Position of Largest Number in Array"
+  Before: 5, 3, 6, 8, 2, 10, 11, 9, 1, 4, 7
+  first result is 6
+  After: 5, 3, 6, 8, 2, 10, 11, 9, 1, 4, 7
+  Before: 45, 23, 66, 18, 21, 10, 31, 75
+  second result is 7
+  After: 45, 23, 66, 18, 21, 10, 31, 75
+  Before: -45, 23, -21, 10, 75, -90
+  third result is 4
+  After: -45, 23, -21, 10, 75, -90
+  
+  ./example4 "Average of Numbers in Array"
+  Before: 5, 3, 6, 8, 2, 10, 11, 9, 1, 4, 7
+  first result is 6
+  After: 5, 3, 6, 8, 2, 10, 11, 9, 1, 4, 7
+  Before: 45, 23, 66, 18, 21, 10, 31, 75
+  second result is 36
+  After: 45, 23, 66, 18, 21, 10, 31, 75
+  Before: -45, 23, -21, 10, 75, -90
+  third result is -8
+  After: -45, 23, -21, 10, 75, -90
+  
+  ./example5 "Reverse Numbers in Array"
+  Before: 5, 3, 6, 8, 2, 10, 11, 9, 1, 4, 7
+  first result is 11
+  After: 7, 4, 1, 9, 11, 10, 2, 8, 6, 3, 5
+  Before: 45, 23, 66, 18, 21, 10, 31, 75
+  second result is 21
+  After: 75, 31, 10, 21, 18, 66, 23, 45
+  Before: -45, 23, -21, 10, 75, -90
+  third result is 10
+  After: -90, 75, 10, -21, 23, -45
+  
+  ./example6 "Sort Numbers in Array"
+  Before: 5, 3, 6, 8, 2, 10, 11, 9, 1, 4, 7
+  first result is 0
+  After: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
+  Before: 45, 23, 66, 18, 21, 10, 31, 75
+  second result is 0
+  After: 10, 18, 21, 23, 31, 45, 66, 75
+  Before: -45, 23, -21, 10, 75, -90
+  third result is 0
+  After: -90, -45, -21, 10, 23, 75
+
+  prompt$
+
+Note that I added a string argument to each of the example programs
+here; the program doesn't actually look at the argument, but including
+them does makes the output (a little) easier to read ...
+
+------------------------------------------------------------------------
