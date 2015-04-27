@@ -1,4 +1,4 @@
-	.file	"test1.s"
+	.file	"example1.s"
         .text
 	.globl	f
 f:
