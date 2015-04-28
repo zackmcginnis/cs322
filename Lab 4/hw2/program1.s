@@ -22,7 +22,8 @@ loop1:   incl    %eax            # increment count
 
 test1:   movl    1(%rdi), %eax    # load array element
          cmpl    $0, %eax        # test for end of array
-         jne     loop1            # repeat if we're not done ...
+         jne     loop1
+         jmp     test2            # repeat if we're not done ...
 
 loop2:   incl    %ecx            # increment count
          addq    $4, %rsi        # and move to next array element
