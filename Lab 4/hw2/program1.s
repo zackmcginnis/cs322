@@ -32,7 +32,7 @@ test2:   movl    1(%rsi), %ecx    # load array element
          cmpl    $0, %ecx        # test for end of array
          jne     loop2            # repeat if we're not done ...
 
-         addl    %eax, %ecx      # add both array counts, store in eax
+         addl    %ecx, %eax      # add both array counts, store in eax
 
 ### This is where your code ends ...
 
