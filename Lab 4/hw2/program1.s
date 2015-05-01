@@ -39,16 +39,16 @@ test2:   movl    (%rsi), %ecx    # load array element
 
 
 
-        movl    $1, %ecx        # ecx will count the number of elements
-        movl    (%rdi), %eax    # eax will record the running total
-
-loop:   addq    $4, %rdi        # move to next element in the array
-        movl    (%rdi), %edx    # read array element
-        cmpl    $0, %edx        # are we done?
-        je      done
-        addl    %edx, %eax      # add to running total
-        incl    %ecx            # increment count
-        jmp     loop
+#     movl    $1, %ecx        # ecx will count the number of elements
+#        movl    (%rdi), %eax    # eax will record the running total
+#
+#loop:   addq    $4, %rdi        # move to next element in the array
+ #       movl    (%rdi), %edx    # read array element
+ #       cmpl    $0, %edx        # are we done?
+ #       je      done
+ #       addl    %edx, %eax      # add to running total
+#        incl    %ecx            # increment count
+ #       jmp     loop
 
         # When we reach this point in the program, %eax will
         # contain the total of all the array elements and ecx
