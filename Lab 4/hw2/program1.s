@@ -24,7 +24,7 @@ loop:   addq    $4, %rdi        # move to next element in the array
         jmp     loop
 
 loop1:  movl    (%rsi), %eax    # eax will record the running total
-        hmp     loop2
+        jmp     loop2
 
 loop2:  addq    $4, %rsi        # move to next element in the array
         movl    (%rsi), %edx    # read array element
