@@ -14,23 +14,26 @@ f:
 ###	   each array.  The two arrays themselves should not be
 ###	   modified.
 
-        movl    (%rdi), %eax    # eax will record the running total
+        movl    (%rdi), %ecx    # eax will record the running total
+        movl    (%rsi), %edx
 
-loop:   addq    $4, %rdi        # move to next element in the array
-        movl    (%rdi), %edx    # read array element
-        cmpl    $0, %edx        # are we done?
-        jmp     loop1
-        addl    %edx, %eax      # add to running total
+loop:   cmpl    $0, %ecx
+        je      loop2
+        addq    $4, %rdi        # move to next element in the array
+        movl    (%rdi), %ebx
+        addl    %ebx, %eax    
+        decl    %ecx
         jmp     loop
 
-loop1:  movl    (%rsi), %eax    # eax will record the running total
-        jmp     loop2
+#loop1:  movl    (%rsi), %eax    # eax will record the running total
+#        jmp     loop2
 
-loop2:  addq    $4, %rsi        # move to next element in the array
-        movl    (%rsi), %edx    # read array element
-        cmpl    $0, %edx        # are we done?
+loop2:  cmpl    $0, %edx
         je      done
-        addl    %edx, %eax      # add to running total
+        addq    $4, %rsi        # move to next element in the array
+        movl    (%rsi), %ecx    # read array element
+        addl    %ecx, %eax  
+        decl    %edx
         jmp     loop2
 
 done:
