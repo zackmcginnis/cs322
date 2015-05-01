@@ -33,10 +33,6 @@ loop2:  addq    $4, %rsi        # move to next element in the array
         addl    %edx, %eax      # add to running total
         jmp     loop2
 
-
-        # When we reach this point in the program, %eax will
-        # contain the total of all the array elements and ecx
-        # contain the number of array elements.
 done:
 
 ### This is where your code ends ...
