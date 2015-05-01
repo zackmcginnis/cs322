@@ -9,8 +9,8 @@ f:
 ### This is where your code begins ...
 
         movl    $0, %eax        # eax will count the number of elements
-        #movl    $0, %rdi
-        #movl    $0, %rsi
+        movq    $0, %rdi
+        movq    $0, %rsi
         movl    (%rdi), %edx    # read array element of first byte which signifies length
         movl    (%rsi), %ebx
 
