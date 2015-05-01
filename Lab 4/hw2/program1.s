@@ -15,18 +15,17 @@ f:
 ###	   modified.
 
         movl    (%rdi), %ecx    # eax will record the running total
-        movl    (%rsi), %edx
+        
 
 loop:   cmpl    $0, %ecx
-        je      loop2
+        je      loop1
         addq    $4, %rdi        # move to next element in the array
-        movl    (%rdi), %ebx
-        addl    %ebx, %eax    
+        movl    (%rdi), %edx
+        addl    %edx, %eax    
         decl    %ecx
         jmp     loop
 
-#loop1:  movl    (%rsi), %eax    # eax will record the running total
-#        jmp     loop2
+loop1:  movl    (%rsi), %edx
 
 loop2:  cmpl    $0, %edx
         je      done
