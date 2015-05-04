@@ -26,7 +26,7 @@ incloop1: incl  %eax
           jmp   loop1
 
 loop2a: movl    (%rsi), %edx
-        jmp l   loop2
+        jmp     loop2
 
 
 loop2:  cmpl    $0, %edx
