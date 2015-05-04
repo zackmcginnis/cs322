@@ -12,7 +12,7 @@ f:
         movq    $0, %rdi
         movq    $0, %rsi
         movl    (%rdi), %edx    # read array element of first byte which signifies length
-        movl    (%rsi), %ebx
+        movl    (%rsi), %e8
 
 loop1:  cmpl    $0, %edx
         je      loop2
@@ -26,12 +26,12 @@ loop1:  cmpl    $0, %edx
 incloop1: incl  %eax
           jmp   loop1
 
-loop2:  cmpl    $0, %ebx
+loop2:  cmpl    $0, %e8
         je      done
-        decl    %ebx            #decrement the value of the length of the array (to know how many values to count)
+        decl    %e8            #decrement the value of the length of the array (to know how many values to count)
         addq    $4, %rsi        # move to next element in the array
-        movl    (%rsi), %ecx    # read array element
-        cmpl    $0, %ecx        # are we done?
+        movl    (%rsi), %e9    # read array element
+        cmpl    $0, %e9        # are we done?
         je      loop2
         jmp     incloop2
 
