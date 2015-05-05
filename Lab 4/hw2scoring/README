@@ -1,0 +1,55 @@
+Instructions:
+-------------
+0) Finish preparing your solutions to the Homework 2 exercises.
+
+1) You should not share any of your source files, test output
+   files, or other materials (for example, testing tools,
+   attempts to reverse engineer the testinf program, etc.) with
+   any other students.  Any sharing of this kind may be
+   considered a breach of academic integrity.
+
+2) Your solutions should be saved in plain text, assembly language
+   source files called program1.s, program2.s, program3.s,
+   program4.s, program5.s, and program6.s, all of which should be
+   derived from either the linux.s or mac.s templates that were
+   supplied with the homework materials.  You should include ALL
+   six files in this directory.  If you did not attempt one or
+   more of the problems, use an unmodified (but suitably renamed)
+   copy of the template to fill the gap.
+
+3) Put copies of your six assembly language source files in the
+   directory that contains this README file as well as munge.c
+   and the supplied "Makefile".  You are strongly encouraged to
+   keep a backup of your source files in a different directory,
+   and to check that you have included the correct versions of
+   those files here before submitting.
+
+4) Edit the line near the top of the Makefile that sets the
+   PSUID variable so that the right hand side is your nine digit
+   PSU Id number.  Make sure you enter this number correctly to
+   ensure that you receive credit for your solutions.
+
+5) Type "make".  This will compile each of your programs and
+   subject them to a collection of tests, capturing the output
+   in each case and then packaging those outputs, together with
+   your source code, in a single zip file whose name includes
+   your PSU Id.
+
+6) To complete your submission, upload your zip file to D2L.
+   Do not submit any other materials or use any other file
+   formats to prepare your submission.  You may upload multiple
+   versions of your solution prior to the deadline for submission;
+   only your last submission will be retained.
+
+Please post questions on D2L or send email to mpj@pdx.edu if you
+have any problems with the procedure that is described here.
+
+A NOTES:
+
+- The main testing program, munge.c, has been obfuscated, not
+  because it contains any special secrets (it doesn't!) but
+  simply to discourage you from worrying about what the test
+  program does.  From my perspective, if you have any energy
+  for deciphering munge.c, that would probably be better
+  directed towards developing and testing your solutions!
+
