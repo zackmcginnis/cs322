@@ -1,7 +1,7 @@
 # Instructions: Replace the text on the right of the "=" sign in the
 # following line with your nine digit PSU ID number before you run "make".
 
-PSUID = Please_enter_your_PSU_ID_in_the_Makefile_and_try_again
+PSUID = 903343191
 
 #------------------------------------------------------------------------
 
