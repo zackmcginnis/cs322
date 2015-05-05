@@ -34,7 +34,8 @@ loop2:  cmpq    %rdi, %rcx      # compare pointers at two ends of array
         subq    $4, %rcx
         jmp     loop2           # and repeat ...
 
-done:   # the problem description doesn't specify what value should be
+done:   movl    $1,  %eax
+        # the problem description doesn't specify what value should be
         # returned in %eax so we won't worry about it here ...
 
 

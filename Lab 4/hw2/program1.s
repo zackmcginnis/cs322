@@ -15,6 +15,7 @@ f:
 ###	   modified.
 
         movl    (%rdi), %ecx    # eax will record the running total
+        movl    $0, %eax
 loop:   cmpl    $0, %ecx
         je      loop1
         addq    $4, %rdi        # move to next element in the array
