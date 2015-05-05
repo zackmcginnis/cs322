@@ -8,7 +8,7 @@ f:
 ### This is where your code begins ...
 
         movl    (%rdi), %edx      # initialize %rdx at start of array
-       # movq    $0, %rcx
+        movq    $0, %rcx
         movl    $1, %eax
 loop1:  cmpl    $0, %edx
         je      loop2
@@ -26,8 +26,8 @@ loop1:  cmpl    $0, %edx
 loop2:  cmpq    %rdi, %rdx      # compare pointers at two ends of array
         jnl     done
         movl    (%rdi), %ecx    # read values from each end of the array
-        movl    (%rcx), %edx
-        movl    %edx, (%rdi)    # write them back in reverse order
+        movl    (%rcx), %eax
+        movl    %eax, (%rdi)    # write them back in reverse order
         movl    %ecx, (%rcx)
         addq    $4, %rdi        # adjust pointers at each end of array
         subq    $4, %rcx
