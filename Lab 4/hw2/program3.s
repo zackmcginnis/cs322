@@ -8,22 +8,24 @@ f:
 ### This is where your code begins ...
 
         movl    (%rdi), %edx      # initialize %rdx at start of array
-        #movq    $0, %rcx
-        #movl    $1, %eax
+        movq    %rdi, %rdx
 loop1:  cmpl    $0, %edx
-        je      loop2
+        je      loop2a
         decl    %edx
-        addq    $4, %rdi        # move to next array element
-        movq    (%rdi), %rcx    # read in array element
+        addq    $4, %rdx        # move to next array element
+        movq    (%rdx), %rcx    # read in array element
         jmp     loop1
 
+
+loop2a: movq   $4, %rdi
+        jmp    loop2
 ### Our next step is to swap pairs of elements, exchanging the value
 ### in memory at %rdi with the value in memory at %rdx.  After each
 ### exchange, we add $4 to %rdi and subtract $4 from %rdx.  This
 ### process stops when %rdi >= %rdx, at which point we can be sure
 ### that the array has been reversed:
 
-loop2:  cmpq    %rdi, %rdx      # compare pointers at two ends of array
+loop2:  cmpq    %rdi, %rcx      # compare pointers at two ends of array
         jnl     done
         movl    (%rdi), %ecx    # read values from each end of the array
         movl    (%rcx), %eax
