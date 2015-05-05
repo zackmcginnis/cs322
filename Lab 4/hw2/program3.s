@@ -8,7 +8,7 @@ f:
 ### This is where your code begins ...
 
         movl    (%rdi), %edx      # initialize %rdx at start of array
-        movq    $0, %rcx
+       # movq    $0, %rcx
         movl    $1, %eax
 loop1:  cmpl    $0, %edx
         je      loop2
