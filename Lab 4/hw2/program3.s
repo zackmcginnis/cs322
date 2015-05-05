@@ -7,13 +7,15 @@ f:
 #	   should be reversed.  The second array should not be changed.
 ### This is where your code begins ...
 
-        movq    %rdi, %rdx      # initialize %rdx at start of array
-loop1:  addq    $4, %rdx        # move to next array element
-        movl    (%rdx), %eax    # read in array element
-        cmpl    $0, %eax        # are we done?
-        jne     loop1
-        # At this point, %rdx holds the address of the zero element
-        subq    $4, %rdx        # adjust %rdx to point to the last element
+        movl    (%rdi), %edx      # initialize %rdx at start of array
+        movq    $0, %rcx
+        movl    $1, %eax
+loop1:  cmpl    $0, %edx
+        je      loop2
+        decl    %edx
+        addq    $4, %rdi        # move to next array element
+        movq    (%rdi), %rcx    # read in array element
+        jmp     loop1
 
 ### Our next step is to swap pairs of elements, exchanging the value
 ### in memory at %rdi with the value in memory at %rdx.  After each
@@ -21,14 +23,14 @@ loop1:  addq    $4, %rdx        # move to next array element
 ### process stops when %rdi >= %rdx, at which point we can be sure
 ### that the array has been reversed:
 
-loop2:  cmpq    %rdx, %rdi      # compare pointers at two ends of array
+loop2:  cmpq    %rdi, %rdx      # compare pointers at two ends of array
         jnl     done
         movl    (%rdi), %ecx    # read values from each end of the array
-        movl    (%rdx), %eax
-        movl    %eax, (%rdi)    # write them back in reverse order
-        movl    %ecx, (%rdx)
+        movl    (%rcx), %edx
+        movl    %edx, (%rdi)    # write them back in reverse order
+        movl    %ecx, (%rcx)
         addq    $4, %rdi        # adjust pointers at each end of array
-        subq    $4, %rdx
+        subq    $4, %rcx
         jmp     loop2           # and repeat ...
 
 done:   # the problem description doesn't specify what value should be
