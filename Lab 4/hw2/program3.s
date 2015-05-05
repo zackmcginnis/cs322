@@ -7,18 +7,17 @@ f:
 #	   should be reversed.  The second array should not be changed.
 ### This is where your code begins ...
 
-        movl    (%rdi), %edx      # initialize %rdx at start of array
+        movl    (%rdi), %edx      # initialize %edx at start of array
+        addq    $4, %rdi
         movq    %rdi, %rdx
 loop1:  cmpl    $0, %edx
-        je      loop2a
+        je      loop2
         decl    %edx
         addq    $4, %rdx        # move to next array element
         movq    (%rdx), %rcx    # read in array element
         jmp     loop1
 
 
-loop2a: movq   $4, %rdi
-        jmp    loop2
 ### Our next step is to swap pairs of elements, exchanging the value
 ### in memory at %rdi with the value in memory at %rdx.  After each
 ### exchange, we add $4 to %rdi and subtract $4 from %rdx.  This
