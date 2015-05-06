@@ -18,7 +18,7 @@ f:
 loop1a: movl   $0, %eax
         jmp     loop1
 
-loop1:  cmpl    %0, %edx      # compare pointers at two ends of array
+loop1:  cmpl    $0, %edx      # compare pointers at two ends of array
         je      loop1b
         addq    $4, %rdi        # adjust pointers at each end of array
         addq    $4, %rsi
