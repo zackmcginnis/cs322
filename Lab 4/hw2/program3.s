@@ -11,14 +11,14 @@ f:
         movl    $0, %eax
         movl    $0, %ecx
         movl    $0, %edx
-        movq    %rdi, %rcx
+        movq    %rdi, %rdx
         movl    (%rdi), %edx             # initialize %edx at start of array      
         addq    $4, %rdi
 
 loop1:  cmpl    $0, %edx
         je      loop2
         decl    %edx
-        addq    $4, %rcx        # move to next array element
+        addq    $4, %rdx        # move to next array element
         jmp     loop1
 
 
@@ -28,14 +28,14 @@ loop1:  cmpl    $0, %edx
 ### process stops when %rdi >= %rdx, at which point we can be sure
 ### that the array has been reversed:
 
-loop2:  cmpq    %rcx, %rdi      # compare pointers at two ends of array
+loop2:  cmpq    %rdx, %rdi      # compare pointers at two ends of array
         jnl     done
         movl    (%rdi), %ecx    # read values from each end of the array
-        movl    (%rcx), %eax
+        movl    (%rdx), %eax
         movl    %eax, (%rdi)    # write them back in reverse order
-        movl    %ecx, (%rcx)
+        movl    %ecx, (%rdx)
         addq    $4, %rdi        # adjust pointers at each end of array
-        subq    $4, %rcx
+        subq    $4, %rdx
         jmp     loop2           # and repeat ...
 
 done:   movl    $1,  %eax
