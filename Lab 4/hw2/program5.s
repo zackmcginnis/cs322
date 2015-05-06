@@ -30,8 +30,45 @@ f:
 #
 ### This is where your code begins ...
 
-        movl    $42, %eax     # replace this with your code!
+        movl     (%rdi), %ecx
+  		movl     (%rsi), %edx
+   		cmpl     %ecx, %edx
+   		je       loop1a
+   		jmp      loop2
 
+loop1a: movl   %ecx, %eax
+        cmpl   $0, %ecx
+        jz     done
+        jmp     loop1
+
+loop1:  cmpl    $0, %eax
+        je      dotloop
+        addq    $4, %rdi         
+        addq    $4, %rsi
+ 		movl    (%rdi), %ecx
+  		movl    (%rsi), %edx
+
+  		cmpl    %edx, %ecx
+  		decl    %eax
+  		jnl     swaploop
+  		jmp     loop1
+
+
+swaploop: 
+
+         jmp   loop1
+
+dotloop:          
+         #eax contains dot product (i.e., 0*4 + 1*3 + 2*2 +
+        
+ 
+loop2:  addl   %ecx, %edx
+        movl   %edx, %eax
+        jmp    done
+     #eax contains sum of lengths of the two 
+
+
+done:
 ### This is where your code ends ...
 
 	ret
