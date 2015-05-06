@@ -11,7 +11,7 @@ f:
         movl    $0, %eax
         movl    $0, %ecx
         movl    $0, %edx
-        movq    %rdi, %rdx
+        movq    %rsi, %rdx
         movl    (%rdi), %edx             # initialize %edx at start of array      
         addq    $4, %rdi
 
