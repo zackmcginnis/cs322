@@ -34,6 +34,7 @@ loop1b: movl  $0, %eax
 
 loop2:  subl  %ecx, %edx
         movl  %edx, %eax
+        movl  $0, %edx
         cdq
         xorl  %eax, %edx
         subl  %eax, %edx
