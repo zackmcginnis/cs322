@@ -18,7 +18,7 @@ loop1:  addq    $4, %rdx        # move to next array element
         cmpl    $0, %eax        # are we done?
         jne     loop1
         # At this point, %rdx holds the address of the zero element
-        subq    $4, %rdx        # adjust %rdx to point to the last element
+        subq    $4, %rdx        # adjust %rdx to  point to the last element
 
 ### Our next step is to swap pairs of elements, exchanging the value
 ### in memory at %rdi with the value in memory at %rdx.  After each
@@ -36,7 +36,7 @@ loop2:  cmpq    %rdx, %rdi      # compare pointers at two ends of array
         subq    $4, %rdx
         jmp     loop2           # and repeat ...
 
-done:   # the problem description doesn't specify what value should be
+done:   movl   $1, %eax# the problem description doesn't specify what value should be
         # returned in %eax so we won't worry about it here ...
 
 
