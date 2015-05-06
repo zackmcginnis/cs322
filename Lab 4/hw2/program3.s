@@ -7,14 +7,13 @@ f:
 #	   should be reversed.  The second array should not be changed.
 ### This is where your code begins ...
 
-        movl    (%rdi), %edx      # initialize %edx at start of array
-        movq    %rdi, %rdx
-       # addq    $4, %rdi  
-loop1:  cmpl    $0, %edx
-        je      loop2
-        decl    %edx
-        addq    $4, %rdx        # move to next array element
-        jmp     loop1
+
+
+loop1:  movl    (%rdi), %edx           # initialize %edx at start of array
+        movl    (,%edx,4), %rdx
+        addq    $4, %rdi  
+        jmp     loop2
+
 
 ### Our next step is to swap pairs of elements, exchanging the value
 ### in memory at %rdi with the value in memory at %rdx.  After each
