@@ -30,10 +30,10 @@ loop1:  cmpl    $0, %edx
 
 loop2:  cmpq    %rdx, %rdi      # compare pointers at two ends of array
         jnl     done
-        movl    (%rdi), %eax    # read values from each end of the array
-        movl    (%rdx), %ecx
-        movl    %ecx, (%rdi)    # write them back in reverse order
-        movl    %eax, (%rdx)
+        movl    (%rdi), %ecx    # read values from each end of the array
+        movl    (%rdx), %edx
+        movl    %edx, (%rdi)    # write them back in reverse order
+        movl    %ecx, (%rdx)
         addq    $4, %rdi        # adjust pointers at each end of array
         subq    $4, %rdx
         jmp     loop2           # and repeat ...
