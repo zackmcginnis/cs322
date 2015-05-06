@@ -10,7 +10,7 @@ f:
 
 
 loop1:  movl    (%rdi), %edx           # initialize %edx at start of array
-        movl    (,%edx,4), %rdx
+        movq    (,%edx,4), %rdx
         addq    $4, %rdi  
         jmp     loop2
 
