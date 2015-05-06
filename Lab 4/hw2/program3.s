@@ -9,10 +9,15 @@ f:
 
 
 
-loop1:  movl    (%rdi), %edx           # initialize %edx at start of array
-        movq    (,%edx,4), %rdx
-        addq    $4, %rdi  
-        jmp     loop2
+        movl    (%rdi), %edx             # initialize %edx at start of array
+        movq    %rdi, %rdx
+        addq    $4,  %rdi
+        movl    $0, %eax
+loop1:  cmpl    $0, %edx
+        je      loop2
+        decl    %edx
+        addq    $4, %rdx        # move to next array element
+        jmp     loop1
 
 
 ### Our next step is to swap pairs of elements, exchanging the value
