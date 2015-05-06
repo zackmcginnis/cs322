@@ -36,7 +36,7 @@ loop2:  subl  %ecx, %edx
         movl  %edx, %eax
         movl  $0, %edx
         cltd
-        xorl  %eax, %edx
+        xorl  %edx, %eax
         subl  %edx, %eax
         jmp  done
 
