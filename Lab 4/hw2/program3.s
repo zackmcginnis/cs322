@@ -27,7 +27,7 @@ loop1:  cmpl    $0, %edx
 ### process stops when %rdi >= %rdx, at which point we can be sure
 ### that the array has been reversed:
 
-loop2:  cmpq    %rdi, %rdx      # compare pointers at two ends of array
+loop2:  cmpq    %rdx, %rdi      # compare pointers at two ends of array
         jnl     done
         movl    (%rdi), %ecx    # read values from each end of the array
         movl    (%rdx), %eax
