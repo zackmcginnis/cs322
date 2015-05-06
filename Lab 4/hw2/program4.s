@@ -9,8 +9,39 @@ f:
 #	   of the difference between their lengths.
 ### This is where your code begins ...
 
-        movl    $42, %eax     # replace this with your code!
+    	movl     (%rdi), %ecx
+  		movl     (%rsi), %edx
+   		cmpl     %ecx, %edx
+   		je       loop1a
+   		jmp      loop2
 
+loop1a: movl   $0, %eax
+        jmp     loop1
+
+loop1:  cmpl    %0, %edx      # compare pointers at two ends of array
+        je      loop1b
+        addq    $4, %rdi        # adjust pointers at each end of array
+        addq    $4, %rsi
+        movl    (%rdi), %ecx    # read values from each end of the array
+        movl    (%rsi), %eax
+        movl    %eax, (%rdi)    # write them back in reverse order
+        movl    %ecx, (%rsi)
+        decl    %edx
+        jmp     loop1           # and repeat ...
+
+loop1b: movl  $0, %eax
+        jmp   done
+
+loop2:  subl  %ecx, %edx
+        movl  %edx, %eax
+        cdq
+        xorl  %eax, %edx
+        subl  %eax, %edx
+        jmp  done
+
+
+
+done:
 ### This is where your code ends ...
 
 	ret
