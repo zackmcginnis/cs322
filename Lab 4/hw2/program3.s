@@ -15,7 +15,6 @@ loop1:  cmpl    $0, %edx
         je      loop2
         decl    %edx
         addq    $4, %rdx        # move to next array element
-        movl    (%rdx), %eax
         jmp     loop1
 
 
