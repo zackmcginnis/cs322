@@ -9,7 +9,7 @@ f:
 
         movl    (%rdi), %edx      # initialize %edx at start of array
         movq    %rdi, %rdx
-        addq    $4, %rdi  
+       # addq    $4, %rdi  
 loop1:  cmpl    $0, %edx
         je      loop2
         decl    %edx
