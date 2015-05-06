@@ -8,9 +8,13 @@ f:
 ### This is where your code begins ...
 
 
+        movl    $0, %eax
+        movl    $0, %ecx
+        movl    $0, %edx
         movq    %rdi, %rdx
         movl    (%rdi), %edx             # initialize %edx at start of array      
         addq    $4, %rdi
+
 loop1:  cmpl    $0, %edx
         je      loop2
         decl    %edx
