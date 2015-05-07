@@ -30,21 +30,21 @@ f:
 #
 ### This is where your code begins ...
       movl      $0, %eax
-      movl      $0, %esi
+      movq      $0, %r7
         movl     (%rdi), %ecx
   		movl     (%rsi), %edx
    		cmpl     %ecx, %edx
    		je       loop1a
    		jmp      loop2
 
-loop1a: movl   %ecx, %esi
+loop1a: movq   (%rdi), %r7
         cmpl   $0, %ecx
         jz     done
         jmp     loop1
 
-loop1:  cmpl    $0, %esi
+loop1:  cmpq    $0, r7
         je      done
-        decl    %esi
+        decq    %r7
         addq    $4, %rdi         
         addq    $4, %rsi
  		    movl    (%rdi), %ecx
