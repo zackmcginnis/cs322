@@ -29,36 +29,40 @@ f:
 #	   result should be the sum of the lengths of the two arrays.
 #
 ### This is where your code begins ...
-
+      movl      $0, %eax
+      movq      $0, %r10
         movl     (%rdi), %ecx
   		movl     (%rsi), %edx
    		cmpl     %ecx, %edx
    		je       loop1a
    		jmp      loop2
 
-loop1a: movl   %ecx, %eax
+loop1a: movslq   %ecx, %r10
         cmpl   $0, %ecx
         jz     done
         jmp     loop1
 
-loop1:  cmpl    $0, %eax
-        je      dotloop
+loop1:  cmpq    $0, %r10
+        je      done
+        decq    %r10
         addq    $4, %rdi         
         addq    $4, %rsi
- 		movl    (%rdi), %ecx
-  		movl    (%rsi), %edx
+ 		    movl    (%rdi), %ecx
+  	   	movl    (%rsi), %edx
 
-  		cmpl    %edx, %ecx
-  		decl    %eax
-  		jnl     swaploop
-  		jmp     loop1
+  		  cmpl    %edx, %ecx
+        imull   %edx, %ecx
+        addl    %ecx, %eax
+  		  jnl     swaploop
+  		  jmp     loop1
 
 
-swaploop: 
-
-         jmp   loop1
-
-dotloop:          
+swaploop: movq  (%rdi), %r8
+          movq  (%rsi), %r9
+          movq   %r8, (%rsi)
+          movq   %r9, (%rdi)
+           jmp   loop1
+         
          #eax contains dot product (i.e., 0*4 + 1*3 + 2*2 +
         
  
