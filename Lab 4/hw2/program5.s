@@ -37,7 +37,7 @@ f:
    		je       loop1a
    		jmp      loop2
 
-loop1a: movq   (%rdi), %r10
+loop1a: movslq   %ecx, %r10
         cmpl   $0, %ecx
         jz     done
         jmp     loop1
