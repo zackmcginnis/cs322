@@ -42,7 +42,7 @@ loop1a: movq   (%rdi), %rax
         jz     done
         jmp     loop1
 
-loop1:  cmpq    $0, rax
+loop1:  cmpq    $0, %rax
         je      done
         decq    %rax
         addq    $4, %rdi         
