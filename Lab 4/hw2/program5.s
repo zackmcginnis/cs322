@@ -43,20 +43,22 @@ loop1a: movl   %ecx, %eax
 
 loop1:  cmpl    $0, %eax
         je      dotloop
+        decl    %eax
         addq    $4, %rdi         
         addq    $4, %rsi
- 		movl    (%rdi), %ecx
-  		movl    (%rsi), %edx
+ 		    movl    (%rdi), %ecx
+  	   	movl    (%rsi), %edx
 
-  		cmpl    %edx, %ecx
-  		decl    %eax
-  		jnl     swaploop
-  		jmp     loop1
+  		  cmpl    %edx, %ecx
+  		  jnl     swaploop
+  		  jmp     loop1
 
 
-swaploop: 
-
-         jmp   loop1
+swaploop: movq  (%rdi), %r8
+          movq  (%rsi), %r9
+          movq   %r8, (%rsi)
+          movq   %r9, (%rdi)
+           jmp   loop1
 
 dotloop:          
          #eax contains dot product (i.e., 0*4 + 1*3 + 2*2 +
