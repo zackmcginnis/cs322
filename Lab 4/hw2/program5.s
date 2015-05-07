@@ -30,20 +30,21 @@ f:
 #
 ### This is where your code begins ...
       movl      $0, %eax
+      movl      $0, %esi
         movl     (%rdi), %ecx
   		movl     (%rsi), %edx
    		cmpl     %ecx, %edx
    		je       loop1a
    		jmp      loop2
 
-loop1a: movl   %ecx, %eax
+loop1a: movl   %ecx, %esi
         cmpl   $0, %ecx
         jz     done
         jmp     loop1
 
-loop1:  cmpl    $0, %eax
-        je      dotloop
-        decl    %eax
+loop1:  cmpl    $0, %esi
+        je      done
+        decl    %esi
         addq    $4, %rdi         
         addq    $4, %rsi
  		    movl    (%rdi), %ecx
@@ -59,8 +60,7 @@ swaploop: movq  (%rdi), %r8
           movq   %r8, (%rsi)
           movq   %r9, (%rdi)
            jmp   loop1
-
-dotloop:          
+         
          #eax contains dot product (i.e., 0*4 + 1*3 + 2*2 +
         
  
