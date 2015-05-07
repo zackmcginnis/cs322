@@ -29,7 +29,7 @@ f:
 #	   result should be the sum of the lengths of the two arrays.
 #
 ### This is where your code begins ...
-
+      movl      $0, %eax
         movl     (%rdi), %ecx
   		movl     (%rsi), %edx
    		cmpl     %ecx, %edx
