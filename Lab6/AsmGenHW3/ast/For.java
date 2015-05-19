@@ -96,11 +96,11 @@ public class For extends Stmt {
         //test = boolean
         //body = statement
 
-        String Loop = a.newLabel();
-        String Test = a.newLabel();
+        String loop = a.newLabel();
+        String test = a.newLabel();
         init.compile(a, f);
-        a.emit("jmp", Test);
-        a.emitLabel(Loop);
+        a.emit("jmp", test);
+        a.emitLabel(loop);
         body.compile(a, f);
 
         //  If we hae encountered continues in the compilation of the body
@@ -113,9 +113,9 @@ public class For extends Stmt {
 
         a.emitLabel(Test);
         if (test != null)
-            test.branchTrue(a, f, 0, Loop);
+            test.branchTrue(a, f, 0, loop);
         else
-            a.emit("jmp", Loop);
+            a.emit("jmp", loop);
 
         //  If we hae encountered in breaks in the compilation of the body
         //  we need to emit the break label to jump to here
