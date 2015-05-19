@@ -91,11 +91,9 @@ public class For extends Stmt {
     public boolean compile(Assembly a, Frame f) {
         // Remember to allow for the possibility that
         // init, test, and step could each be null ...
-
         //init and step = statement
         //test = boolean
         //body = statement
-
         String lab1 = a.newLabel();
         String lab2 = a.newLabel();
         init.compile(a, f);
