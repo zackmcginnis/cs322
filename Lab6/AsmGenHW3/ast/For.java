@@ -109,11 +109,11 @@ public class For extends Stmt {
         //    a.emitLabel(Continue.stack.pop());
 
         if (step != null)
-            step.compileExpr(a, f, 0);
+            step.compile(a, f);
 
         a.emitLabel(lab2);
         if (test != null)
-            test.branchTrue(a, f, 0, lab1);
+            test.branchTrue(a, f, lab1);
         else
             a.emit("jmp", lab1);
 
