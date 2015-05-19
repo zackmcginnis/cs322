@@ -95,7 +95,34 @@ public class For extends Stmt {
         //init and step = statement
         //test = boolean
         //body = statement
-        
+
+        String Loop = a.newLabel();
+        String Test = a.newLabel();
+        init.compile(a, f);
+        a.emit("jmp", Test);
+        a.emitLabel(Loop);
+        body.compile(a, f);
+
+        //  If we hae encountered continues in the compilation of the body
+        //  we need to emit the break label to jump to here
+        if (!Continue.stack.isEmpty())
+            a.emitLabel(Continue.stack.pop());
+
+        if (step != null)
+            step.compileExpr(a, f, 0);
+
+        a.emitLabel(Test);
+        if (test != null)
+            test.branchTrue(a, f, 0, Loop);
+        else
+            a.emit("jmp", Loop);
+
+        //  If we hae encountered in breaks in the compilation of the body
+        //  we need to emit the break label to jump to here
+        if (!Break.stack.isEmpty())
+            a.emitLabel(Break.stack.pop());
+
+
         /*
         String lab1 = a.newLabel();
         String lab2 = a.newLabel();
@@ -108,6 +135,6 @@ public class For extends Stmt {
         */
 
 
-        throw new Error("compile not implemented for For");
+        //throw new Error("compile not implemented for For");
     }
 }
