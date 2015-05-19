@@ -96,31 +96,31 @@ public class For extends Stmt {
         //test = boolean
         //body = statement
 
-        String loop = a.newLabel();
-        String test = a.newLabel();
+        String lab1 = a.newLabel();
+        String lab2 = a.newLabel();
         init.compile(a, f);
-        a.emit("jmp", test);
-        a.emitLabel(loop);
+        a.emit("jmp", lab2);
+        a.emitLabel(lab1);
         body.compile(a, f);
 
         //  If we hae encountered continues in the compilation of the body
         //  we need to emit the break label to jump to here
-        if (!Continue.stack.isEmpty())
-            a.emitLabel(Continue.stack.pop());
+        //if (!Continue.stack.isEmpty())
+        //    a.emitLabel(Continue.stack.pop());
 
         if (step != null)
             step.compileExpr(a, f, 0);
 
-        a.emitLabel(Test);
+        a.emitLabel(lab2);
         if (test != null)
-            test.branchTrue(a, f, 0, loop);
+            test.branchTrue(a, f, 0, lab1);
         else
-            a.emit("jmp", loop);
+            a.emit("jmp", lab1);
 
         //  If we hae encountered in breaks in the compilation of the body
         //  we need to emit the break label to jump to here
-        if (!Break.stack.isEmpty())
-            a.emitLabel(Break.stack.pop());
+       // if (!Break.stack.isEmpty())
+        //    a.emitLabel(Break.stack.pop());
 
 
         /*
