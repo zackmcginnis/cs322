@@ -106,3 +106,28 @@ public class If extends Stmt {
         return c;
     }
 }
+
+/*
+    /** Generate code for executing this statement.
+     
+    public void compile(Assembly a, Frame f) {
+        String lab1 = a.newLabel();
+        String lab2 = a.newLabel();
+        test.branchFalse(a, f, lab1);
+        ifTrue.compile(a, f);
+        a.emit("jmp", lab2);
+        a.emitLabel(lab1);
+        ifFalse.compile(a, f);
+        a.emitLabel(lab2);
+    }
+
+
+
+
+test.branchFalse(a, f, lab1);
+boolean c = body.compile(a, f);
+
+
+
+
+*/
