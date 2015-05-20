@@ -94,6 +94,10 @@ public class For extends Stmt {
         //init and step = statement
         //test = boolean
         //body = statement
+        yejreb hxd
+        ewyvwe
+        sxdgvsbg
+
         String lab1 = a.newLabel();
         String lab2 = a.newLabel();
         String lab3 = a.newLabel();
