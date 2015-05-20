@@ -23,7 +23,13 @@ public class AsmGen {
         // Output the annotated abstract syntax tree:
         if (handler.hasErrors()) {
             handler.dump();
+
+
+
         } else {
+
+            
+
             Defn.compile("out.s", program);
         }
     }
