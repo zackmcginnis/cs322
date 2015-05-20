@@ -6,7 +6,36 @@ Homework 3
 
 1.
 
+    public boolean compile(Assembly a, Frame f) {
+        // Remember to allow for the possibility that
+        // init, test, and step could each be null ...
+        //init and step = statement
+        //test = boolean
+        //body = statement
 
+        String lab1 = a.newLabel();
+        String lab2 = a.newLabel();
+
+        if (init != null)
+          init.compileExpr(a, f);
+
+        a.emit("jmp", lab2);
+        a.emitLabel(lab1);
+        body.compile(a, f);
+
+        //if (test == null)
+        //    return true;
+
+        if (step != null)
+          step.compileExpr(a, f);
+
+        a.emitLabel(lab2);
+        if (test != null)
+           test.branchTrue(a, f, lab1);
+        else
+        body.compile(a, f);
+        return true; 
+    }
 
 
 
