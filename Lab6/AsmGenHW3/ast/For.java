@@ -96,24 +96,31 @@ public class For extends Stmt {
         //body = statement
         String lab1 = a.newLabel();
         String lab2 = a.newLabel();
-        init.compile(a, f);
+        String lab3 = a.newLabel();
+
+        if init (init != null)
+          init.compile(a, f);
+
         a.emit("jmp", lab2);
         a.emitLabel(lab1);
         body.compile(a, f);
 
-        //  If we hae encountered continues in the compilation of the body
-       // //  we need to emit the break label to jump to here
-      //  if (!Continue.stack.isEmpty())
-      //     a.emitLabel(Continue.stack.pop());
-
-      //  if (step != null)
-         //   step.compile(a, f);
+        if (step != null)
+          step.compile(a, f);
 
         a.emitLabel(lab2);
-       // if (test != null)
-           // test.branchTrue(a, f, lab1);
-        //else
-            a.emit("jmp", lab1);
+        if (test != null)
+           test.branchTrue(a, f, lab1);
+        else
+        a.emit("jmp", lab1);
+        return true;
+
+            //  If we hae encountered continues in the compilation of the body
+            // //  we need to emit the break label to jump to here
+            //  if (!Continue.stack.isEmpty())
+              //     a.emitLabel(Continue.stack.pop());
+
+
         //return true;
 
         //  If we hae encountered in breaks in the compilation of the body
@@ -121,7 +128,7 @@ public class For extends Stmt {
        // if (!Break.stack.isEmpty())
           // a.emitLabel(Break.stack.pop());
               throw new Error("compile not implemented dssssfor For");
-       return true;
+     
 
 
         /*
