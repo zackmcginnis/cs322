@@ -102,24 +102,24 @@ public class For extends Stmt {
         body.compile(a, f);
 
         //  If we hae encountered continues in the compilation of the body
-        //  we need to emit the break label to jump to here
-        if (!Continue.stack.isEmpty())
-           a.emitLabel(Continue.stack.pop());
+       // //  we need to emit the break label to jump to here
+      //  if (!Continue.stack.isEmpty())
+      //     a.emitLabel(Continue.stack.pop());
 
-        if (step != null)
-            step.compile(a, f);
+      //  if (step != null)
+         //   step.compile(a, f);
 
         a.emitLabel(lab2);
-        if (test != null)
-            test.branchTrue(a, f, lab1);
-        else
+       // if (test != null)
+           // test.branchTrue(a, f, lab1);
+        //else
             a.emit("jmp", lab1);
         //return true;
 
         //  If we hae encountered in breaks in the compilation of the body
         //  we need to emit the break label to jump to here
-        if (!Break.stack.isEmpty())
-           a.emitLabel(Break.stack.pop());
+       // if (!Break.stack.isEmpty())
+          // a.emitLabel(Break.stack.pop());
        return true;
 
 
