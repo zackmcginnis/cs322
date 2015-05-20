@@ -102,10 +102,12 @@ public class For extends Stmt {
         if (init != null)
           init.compileExpr(a, f);
 
-
         a.emit("jmp", lab2);
         a.emitLabel(lab1);
         body.compile(a, f);
+
+        if (test == null)
+            return true;
 
         if (step != null)
           step.compileExpr(a, f);
