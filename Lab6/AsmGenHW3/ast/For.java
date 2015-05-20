@@ -102,7 +102,7 @@ public class For extends Stmt {
         String lab2 = a.newLabel();
         String lab3 = a.newLabel();
 
-        if init (init != null)
+        if (init != null)
           init.compile(a, f);
 
         a.emit("jmp", lab2);
