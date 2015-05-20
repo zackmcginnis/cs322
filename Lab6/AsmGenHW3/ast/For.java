@@ -120,6 +120,7 @@ public class For extends Stmt {
         //  we need to emit the break label to jump to here
        // if (!Break.stack.isEmpty())
           // a.emitLabel(Break.stack.pop());
+              throw new Error("compile not implemented dssssfor For");
        return true;
 
 
@@ -135,6 +136,6 @@ public class For extends Stmt {
         */
 
 
-        //throw new Error("compile not implemented dssssfor For");
+      
     }
 }
