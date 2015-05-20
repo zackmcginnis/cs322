@@ -97,7 +97,7 @@ public class For extends Stmt {
 
         String lab1 = a.newLabel();
         String lab2 = a.newLabel();
-        String lab3 = a.newLabel();
+        //String lab3 = a.newLabel();
 
         if (init != null)
           init.compile(a, f);
