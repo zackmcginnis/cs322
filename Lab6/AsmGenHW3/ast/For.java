@@ -94,9 +94,6 @@ public class For extends Stmt {
         //init and step = statement
         //test = boolean
         //body = statement
-        yejreb hxd
-        ewyvwe
-        sxdgvsbg
 
         String lab1 = a.newLabel();
         String lab2 = a.newLabel();
@@ -117,7 +114,8 @@ public class For extends Stmt {
            test.branchTrue(a, f, lab1);
         else
         a.emit("jmp", lab1);
-       // return true;
+        
+        return true;
 
             //  If we hae encountered continues in the compilation of the body
             // //  we need to emit the break label to jump to here
@@ -131,7 +129,7 @@ public class For extends Stmt {
         //  we need to emit the break label to jump to here
        // if (!Break.stack.isEmpty())
           // a.emitLabel(Break.stack.pop());
-              throw new Error("compile not implemented dssssfor For");
+            //  throw new Error("compile not implemented dssssfor For");
      
 
 
