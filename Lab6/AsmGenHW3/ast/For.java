@@ -100,14 +100,15 @@ public class For extends Stmt {
         //String lab3 = a.newLabel();
 
         if (init != null)
-          init.compile(a, f);
+          init.compileExpr(a, f);
+
 
         a.emit("jmp", lab2);
         a.emitLabel(lab1);
         body.compile(a, f);
 
         if (step != null)
-          step.compile(a, f);
+          step.compileExpr(a, f);
 
         a.emitLabel(lab2);
         if (test != null)
