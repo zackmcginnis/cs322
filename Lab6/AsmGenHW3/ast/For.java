@@ -106,8 +106,8 @@ public class For extends Stmt {
         a.emitLabel(lab1);
         body.compile(a, f);
 
-        if (test == null)
-            return true;
+        //if (test == null)
+        //    return true;
 
         if (step != null)
           step.compileExpr(a, f);
@@ -115,8 +115,8 @@ public class For extends Stmt {
         a.emitLabel(lab2);
         if (test != null)
            test.branchTrue(a, f, lab1);
-        else
-        a.emit("jmp", lab1);
+       // else
+       // a.emit("jmp", lab1);
         
         return true;
 
