@@ -24,7 +24,7 @@ public class AsmGen {
         if (handler.hasErrors()) {
             handler.dump();
         } else {
-          x t z Defn.compile("out.s", program);
+          Defn.compile("out.s", program);
         }
     }
 }
