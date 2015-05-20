@@ -97,7 +97,7 @@ public class For extends Stmt {
 
         String lab1 = a.newLabel();
         String lab2 = a.newLabel();
-        //String lab3 = a.newLabel();
+        String lab3 = a.newLabel();
 
         if (init != null)
           init.compileExpr(a, f);
@@ -115,6 +115,10 @@ public class For extends Stmt {
         a.emitLabel(lab2);
         if (test != null)
            test.branchTrue(a, f, lab1);
-        else return true;      
+        
+       a.emit("jmp", lab3); 
+       a.emitLabel(lab3); 
+       return true; 
+
     }
 }
