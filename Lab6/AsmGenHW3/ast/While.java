@@ -59,7 +59,7 @@ public class While extends Stmt {
         a.emitLabel(lab1);
         body.compile(a, f);
         a.emitLabel(lab2);
-        test.branchTrue(a, f, lab1);
+        faketest.branchTrue(a, f, lab1);
         //return true;
     }
 }
