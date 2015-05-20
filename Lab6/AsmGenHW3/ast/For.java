@@ -117,7 +117,7 @@ public class For extends Stmt {
            test.branchTrue(a, f, lab1);
         else
         a.emit("jmp", lab1);
-        return true;
+       // return true;
 
             //  If we hae encountered continues in the compilation of the body
             // //  we need to emit the break label to jump to here
