@@ -114,8 +114,9 @@ public class For extends Stmt {
         a.emitLabel(lab2);
         if (test != null)
            test.branchTrue(a, f, lab1);
-        
-       return true; 
+        else
+        body.compile(a, f);
+        return true; 
 
     }
 }
