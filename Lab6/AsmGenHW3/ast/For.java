@@ -118,34 +118,6 @@ public class For extends Stmt {
         
         return true;
 
-            //  If we hae encountered continues in the compilation of the body
-            // //  we need to emit the break label to jump to here
-            //  if (!Continue.stack.isEmpty())
-              //     a.emitLabel(Continue.stack.pop());
-
-
-        //return true;
-
-        //  If we hae encountered in breaks in the compilation of the body
-        //  we need to emit the break label to jump to here
-       // if (!Break.stack.isEmpty())
-          // a.emitLabel(Break.stack.pop());
-            //  throw new Error("compile not implemented dssssfor For");
-     
-
-
-        /*
-        String lab1 = a.newLabel();
-        String lab2 = a.newLabel();
-        a.emit("jmp", lab2);
-        a.emitLabel(lab1);
-        body.compile(a, f);
-        a.emitLabel(lab2);
-        test.branchTrue(a, f, lab1);
-        return true;
-        */
-
-
       
     }
 }
