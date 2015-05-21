@@ -2,5 +2,5 @@
   int y = x*x;
 
   void main() {
-    print x;
+    print y;
   }
