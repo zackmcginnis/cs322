@@ -127,16 +127,16 @@ public class Function extends Defn {
     /** Generate compiled code for a function.
      */
     void compileFunction(Assembly a, LocEnv globals) {
-       /** a.emit(".globl", "initGlobals");
-        a.emitLabel("initGlobals");
+        a.emit(".globl", a.name("initGlobals"));
+        a.emitLabel(a.name(initGlobals));
         a.emitPrologue();
-        Frame fr = new FunctionFrame(formals, globals);
+        Frame f = new FunctionFrame(formals, globals);
         //f.dump(a);
-        if (body.compile(a, fr)) {
+        if (body.compile(a, f)) {
             a.emitEpilogue();
         }
         a.emit();
-**/
+
         a.emit(".globl", a.name(name));
         a.emitLabel(a.name(name));
         a.emitPrologue();
