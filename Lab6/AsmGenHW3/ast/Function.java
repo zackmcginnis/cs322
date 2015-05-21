@@ -128,24 +128,25 @@ public class Function extends Defn {
     /** Generate compiled code for a function.
      */
     void compileFunction(Assembly a, LocEnv globals) {
-        a.emit(".globl", a.name("initGlobals"));
+ /**       a.emit(".globl", a.name("initGlobals"));
         a.emitLabel(a.name("initGlobals"));
         a.emitPrologue();
         Frame f = new FunctionFrame(formals, globals);
         for (int i=0; i<formals.length; i++) {
             compileFunction(a, globals);
             //globals = defns[i].declareGlobals(a, globals);
-        }
+        }                                                      //ALMOST DONE. JUST NEED TO ITERATE THROUGH GLOBAL VAR LIST
+                                                               //AND COMPILE or COMPILEFUNCTION EACH OF THEM
         //f.dump(a);
         //if (body.compile(a, f)) {
             a.emitEpilogue();
         //}
         a.emit();
-
+**/
         a.emit(".globl", a.name(name));
         a.emitLabel(a.name(name));
         a.emitPrologue();
-        //Frame f = new FunctionFrame(formals, globals);
+        Frame f = new FunctionFrame(formals, globals);
         //f.dump(a);
         if (body.compile(a, f)) {
             a.emitEpilogue();
