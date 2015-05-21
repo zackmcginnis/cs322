@@ -33,7 +33,17 @@ public abstract class Defn {
             defns[i].compileFunction(a, globals);
         }
 
-        //a.emit(".globl  XinitGlobals");
+        a.emit(".globl", a.name("initGlobals"));
+        a.emitLabel(a.name("initGlobals"));
+        a.emitPrologue();
+        for (int i=0; i<defns.length; i++) {
+            compileFunction(a, globals);
+            //globals = defns[i].declareGlobals(a, globals);
+        }                                                      //ALMOST DONE. JUST NEED TO ITERATE THROUGH GLOBAL VAR LIST
+                                                               //AND COMPILE or COMPILEFUNCTION EACH OF THEM
+        //f.dump(a);
+        //if (body.compile(a, f)) {
+            a.emitEpilogue();
 
         a.close();
     }
