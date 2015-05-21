@@ -128,7 +128,7 @@ public class Function extends Defn {
      */
     void compileFunction(Assembly a, LocEnv globals) {
         a.emit(".globl", a.name("initGlobals"));
-        a.emitLabel(a.name(initGlobals));
+        a.emitLabel(a.name("initGlobals"));
         a.emitPrologue();
         Frame f = new FunctionFrame(formals, globals);
         //f.dump(a);
