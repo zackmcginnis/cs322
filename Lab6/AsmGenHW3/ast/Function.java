@@ -140,7 +140,7 @@ public class Function extends Defn {
         a.emit(".globl", a.name(name));
         a.emitLabel(a.name(name));
         a.emitPrologue();
-        Frame f = new FunctionFrame(formals, globals);
+        //Frame f = new FunctionFrame(formals, globals);
         //f.dump(a);
         if (body.compile(a, f)) {
             a.emitEpilogue();
