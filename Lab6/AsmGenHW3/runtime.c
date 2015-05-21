@@ -16,3 +16,8 @@ int main(int argc, char** argv) {
 void Xprint(int val) {
     printf("output: %d\n", val);
 }
+
+void XinitGlobals() {
+  return true;
+}
+
