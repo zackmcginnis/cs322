@@ -1,6 +1,6 @@
   int x = 2;
-  int y = 3;
+  int y = x*x;
 
   void main() {
-    print y;
+    print x;
   }
