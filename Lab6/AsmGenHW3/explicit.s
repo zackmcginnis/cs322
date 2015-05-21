@@ -7,7 +7,7 @@ Xy:
 	.long	0
 
 	.text
-	.globl	XinitGlobals
+	.globl  XinitGlobals
 XinitGlobals:
 	pushq	%rbp
 	movq	%rsp, %rbp
