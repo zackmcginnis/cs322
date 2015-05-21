@@ -115,7 +115,7 @@ public class For extends Stmt {
         if (test != null)
            test.branchTrue(a, f, lab1);
         else
-        body.compile(a, f);
+        a.emit("jmp", lab1);
         return true; 
     }
 }
