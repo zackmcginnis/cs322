@@ -122,9 +122,9 @@ public class Function extends Defn {
     LocEnv declareGlobals(Assembly a, LocEnv env) {
         // No global variables declared here! But this method
         // is required because Function extends Defn.
-        for (int i=0; i<formals.length; i++) {
-           env = formals[i].declareGlobals(a, env);
-        }
+        //for (int i=0; i<formals.length; i++) {
+        //   env = formals[i].declareGlobals(a, env);
+       // }
         return env;
     }
 
