@@ -17,9 +17,9 @@ void Xprint(int val) {
     printf("output: %d\n", val);
 }
 
-void initGlobals(){
-	
-}
+//void initGlobals(){
+
+//}
 
 /*
 void initGlobals() {
