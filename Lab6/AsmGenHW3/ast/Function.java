@@ -131,10 +131,14 @@ public class Function extends Defn {
         a.emitLabel(a.name("initGlobals"));
         a.emitPrologue();
         Frame f = new FunctionFrame(formals, globals);
-        //f.dump(a);
-        if (body.compile(a, f)) {
-            a.emitEpilogue();
+        for (int i=0; i<defns.length; i++) {
+            compileFunction(a, globals);
+            //globals = defns[i].declareGlobals(a, globals);
         }
+        //f.dump(a);
+        //if (body.compile(a, f)) {
+            a.emitEpilogue();
+        //}
         a.emit();
 
         a.emit(".globl", a.name(name));
