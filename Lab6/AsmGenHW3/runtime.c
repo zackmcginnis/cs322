@@ -18,6 +18,6 @@ void Xprint(int val) {
 }
 
 void XinitGlobals() {
-  return 1;
+  
 }
 
