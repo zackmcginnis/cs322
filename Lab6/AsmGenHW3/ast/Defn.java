@@ -32,7 +32,7 @@ public abstract class Defn {
         for (int i=0; i<defns.length; i++) {
             defns[i].compileFunction(a, globals);
         }
-
+/*
         a.emit(".globl", a.name("initGlobals"));
         a.emitLabel(a.name("initGlobals"));
         a.emitPrologue();
@@ -44,7 +44,7 @@ public abstract class Defn {
         //f.dump(a);
         //if (body.compile(a, f)) {
             a.emitEpilogue();
-
+**/
         a.close();
     }
 
