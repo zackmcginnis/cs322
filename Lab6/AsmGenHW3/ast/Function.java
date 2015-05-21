@@ -22,7 +22,6 @@ public class Function extends Defn {
      */
     private Stmt body;
 
-    private VarIntro[] varlist;
 
     /** Default constructor.
      */
@@ -133,7 +132,7 @@ public class Function extends Defn {
         a.emitLabel(a.name("initGlobals"));
         a.emitPrologue();
         Frame f = new FunctionFrame(formals, globals);
-        for (int i=0; i<varlist.length; i++) {
+        for (int i=0; i<formals.length; i++) {
             compileFunction(a, globals);
             //globals = defns[i].declareGlobals(a, globals);
         }
