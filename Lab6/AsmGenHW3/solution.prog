@@ -21,17 +21,17 @@ print a;
 
 }
 
-int f(int b, int d, int a){
+int f(){
 b = b-d;
 a = a * g(a);
 return a;
 }
     
-int g(int d){
+int g(){
   return 2*d - d;
 }
    
-int h(int a, int b){
+int h(){
   if(a <= 2){
   a = a - 1;
   b = b - 2;
