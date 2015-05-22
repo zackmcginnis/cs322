@@ -36,7 +36,6 @@ int h(int v){
    return 1;
   }
     int temm = h(v - 1);
-    v = temm + h(temm - 2);
-    return temm + v;
+    return temm + h(temm - 2);   
 }
 
