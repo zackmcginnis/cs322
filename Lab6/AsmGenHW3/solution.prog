@@ -22,9 +22,9 @@ print a;
 }
 
 int f(int s, int t){
-s = s-t;
-s = s * g(s);
-return s;
+int diff = s-t;
+diff = diff * g(diff);
+return diff;
 }
     
 int g(int u){
