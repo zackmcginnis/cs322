@@ -36,7 +36,6 @@ int u;
 }
    
 int h(int v){
-int v;
 int w;
   if(v <= 2){
   v = v - 1;
