@@ -46,7 +46,7 @@ Homework 3
 
 
 2.
-
+()
 
 
 
@@ -58,7 +58,7 @@ Homework 3
 
 
 3.
-
+solution.prog
 
 void main() {
     
@@ -101,16 +101,73 @@ int h(int v){
     return tem + h(v - 2);
         
 }
+------------------------------------------
+I have also uploaded a jpeg to the other dropbox which includes
+my diagrams/planning for my solution.prog file.
 
+The original source may differ from my solution in a few different ways.
+First, the original source program may contain different variable names in the 
+function definitions for f(), g(), and h(). Although meaningless, it is likely that 
+the original source program has differing names for the vars within those definitions.
 
+Additionally,
 
+While looking at sample.s, we can find 3 separate examples of poor code quality:
+3.a.
+Within function Xg, we see the lines:
+    movl    $2,   %eax
+    movl    %edi, %esi
+    imull   %esi, %eax
+    movl    %edi, %esi
+    subl    %esi, %eax
 
+Which takes in a variable, multiplies it by 2, then subtracts itself from the product,
+and finally returns the value of the result.
+Essentially, 2*u - u = u.
+Because we know that we could just return the variable u instead of 2*u - u, we can optimize
+this function by returning u.  This is more efficient since returning the variable saves 4 lines
+of instructions per function call.
 
+3.b
+Within function Xf, we see the lines:
+    imull   %ecx, %eax
+    movl    %eax, -8(%rbp)
+    movl    -8(%rbp), %eax
 
+Which translates to:
 
+diff = diff * g(diff);
+return diff;
 
+It appears to me that we could just as easily write:
+return diff * g(diff);
+Which would save us two lines of code by simply returning %eax
+directly after the imull instruction, rather than storing it in diff
+and returning diff. 
 
+3.c
+Additionally, when looking at the last two errors in combination, we notice another possible
+optimization. Since we know that function g essentially returns the original value of the variable
+passed in to it (e.g. g(u) = u), we can simply get rid of function g altogether.
 
+We see function g is called in function f at:
+...
+    movl    -8(%rbp), %edi
+    call    Xg
+    movq    %rax, %rcx
+    ...
+
+And also in block l2 at:
+...
+    movl    -32(%rbp), %edi
+    call    Xg
+    movq    %rax, %rdi
+    call    Xh
+    movq    %rax, %rdi
+...
+
+If we bypass function g and just passed the variable through to the next instructions following the call
+to g, we will be able to save at least two lines of instruction per call to g.
 
 
 
