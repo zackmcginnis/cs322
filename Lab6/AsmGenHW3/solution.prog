@@ -21,7 +21,7 @@ print a;
 
 }
 
-int f(int, int){
+int f(int, int, int){
 b = b-d;
 a = a * g(a);
 return a;
@@ -32,7 +32,7 @@ int g(int){
 }
    
 int h(int){
-  if(a < 2){
+  if(a <= 2){
   a = a - 1;
   b = b - 2;
   return h(a) + h(b);
