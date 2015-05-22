@@ -32,7 +32,7 @@ int g(int){
 }
    
 int h(int){
-  if(a <= 2){
+  if(a < 2){
   a = a - 1;
   b = b - 2;
   return h(a) + h(b);
