@@ -35,8 +35,8 @@ int h(int v){
   if(v < 2){
    return 1;
   }
-    int tem = v - 1;
-    int temm = h(tem);
+    v = v - 1;
+    int temm = h(v);
     temm = temm - 2;
     return h(temm);
 }
