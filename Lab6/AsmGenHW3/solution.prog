@@ -7,7 +7,7 @@ int c = 2;
   while (a<10){
   int d = 0;
   	 while (d<a){
-       b = f(b);
+       b = f(b, d);
        print h(g(d));
        d = 1+d;
   	 }
