@@ -7,7 +7,7 @@ int c = 2;
   while (a<10){
   int d = 0;
   	 while (d<a){
-       b = f(b, d);
+       b = f(b);
        print h(g(d));
        d = 1+d;
   	 }
@@ -21,7 +21,8 @@ print a;
 
 }
 
-int f(int s, int t){
+int f(int s){
+int t;
 s = s-t;
 s = s * g(s);
 return s;
@@ -33,7 +34,7 @@ int g(int u){
    
 int h(int v){
 int w;
-  if(v <= 2){
+  if(v < 2){
   v = v - 1;
   w = h(v);
   return h(w-2);
