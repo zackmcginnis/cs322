@@ -21,7 +21,7 @@ print a;
 
 }
 
-int f(int){
+int f(int, int){
 b = b-d;
 a = a * g(a);
 return a;
