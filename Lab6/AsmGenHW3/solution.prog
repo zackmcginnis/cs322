@@ -33,10 +33,10 @@ int g(int u){
    
 int h(int v){
   if(v < 2){
-  v = v - 1;
-  v = h(v);
-  return h(v-2);
+   return 1;
   }
-  return 1;
+    v = v - 1;
+    v = h(v);
+    return h(v-2);
 }
 
