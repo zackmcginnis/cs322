@@ -5,35 +5,41 @@ int a = 1;
 int b = 2;
 int c = 2;
 
-  // l1
-  while (a < 10) {
-    // l0
+  while (a<10) {
   int d = 0;
-    // l3
-  	 while (d < a){
-
-
-
-
-
-
+  	 while (d<a){
+       b = f(b, d);
+       print h(g(d));
+       d = d+1;
   	 }
 
-
-
-
-
-
-
-
-
-
-
-
-
+     print b;
+     b = b*c;
+     a = a+1;
+     return a;
   }
 
 print a;
 
-return;
 }
+
+int f(int m){
+b = b-d;
+g(a);
+a = a*b;
+return a;
+}
+    
+int g(int y){
+  return 2*y - y;
+}
+   
+int h(int z){
+  if(z <= 2){
+  a = a - 1;
+  b = b - 2;
+  return h(a) + h(b);
+  }
+  return 1;
+}
+
