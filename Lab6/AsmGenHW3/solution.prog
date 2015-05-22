@@ -1,6 +1,31 @@
 
   void main() {
     
+int a = 1;
+int b = 2;
+int c = 2;
+
+  // l1
+  while (a < 10) {
+    // l0
+  int d = 0;
+    // l3
+  	 while (d < a){
+
+
+
+
+
+
+  	 }
+
+
+
+
+
+
+
+
 
 
 
@@ -8,11 +33,7 @@
 
   }
 
+print a;
 
-   int x = 0;
-  int y = 0;
-
-  void initGlobals() {
-    x = 2;
-    y = x*x;
-  }
+return;
+}
