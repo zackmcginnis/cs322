@@ -22,8 +22,7 @@ print a;
 }
 
 int f(int s, int t){
-s = s-t;
-s = s * g(s);
+s = s * g(s-t);
 return s;
 }
     
@@ -32,11 +31,10 @@ int g(int u){
 }
    
 int h(int v){
-int w;
   if(v < 2){
   v = v - 1;
-  w = h(v);
-  return h(w-2);
+  v = h(v);
+  return h(v-2);
   }
   return 1;
 }
