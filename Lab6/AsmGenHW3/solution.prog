@@ -1,0 +1,18 @@
+
+  void main() {
+    
+
+
+
+
+
+  }
+
+
+   int x = 0;
+  int y = 0;
+
+  void initGlobals() {
+    x = 2;
+    y = x*x;
+  }
