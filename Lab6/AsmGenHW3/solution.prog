@@ -27,7 +27,7 @@ a = a * g(a);
 return a;
 }
     
-int g(int){
+int g(int d){
   return 2*d - d;
 }
    
