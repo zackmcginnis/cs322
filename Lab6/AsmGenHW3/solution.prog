@@ -22,8 +22,6 @@ print a;
 }
 
 int f(int s, int t){
-int s;
-int t;
 int temp;
 temp = s-t;
 temp = temp * g(temp);
@@ -31,7 +29,6 @@ return temp;
 }
     
 int g(int u){
-int u;
   return 2*u - u;
 }
    
