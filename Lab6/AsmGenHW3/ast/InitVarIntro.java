@@ -13,6 +13,7 @@ public class InitVarIntro extends VarIntro {
      */
     private Expr exp;
     private VarIntro[] intros;
+    private int temp;
 
     /** Default constructor.
      */
@@ -63,7 +64,7 @@ public class InitVarIntro extends VarIntro {
     }
 
         public void compileGlobals(Assembly a, Frame f) {
-        // If no explicit initializer is given, initialize with zero:
+ /**       // If no explicit initializer is given, initialize with zero:
        a.emit(".globl", a.name("initGlobals"));
         a.emitLabel(a.name("initGlobals"));
         a.emitPrologue();
@@ -77,6 +78,6 @@ public class InitVarIntro extends VarIntro {
         //if (body.compile(a, f)) {
             a.emitEpilogue();
         //}
-        a.emit();
+ **/       a.emit();
     }
 }
