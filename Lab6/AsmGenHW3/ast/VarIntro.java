@@ -72,4 +72,9 @@ public class VarIntro {
         // If no explicit initializer is given, initialize with zero:
         f.allocLocal(a, name, a.immed(0));
     }
+
+        public void compileGlobals(Assembly a, Frame f) {
+        // If no explicit initializer is given, initialize with zero:
+           f.allocLocal(a, name, a.immed(0));
+    }
 }

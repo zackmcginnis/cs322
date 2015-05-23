@@ -60,4 +60,22 @@ public class InitVarIntro extends VarIntro {
         exp.compileExpr(a, f);
         f.allocLocal(a, name, f.free64());
     }
+
+        public void compileGlobals(Assembly a, Frame f) {
+        // If no explicit initializer is given, initialize with zero:
+       a.emit(".globl", a.name("initGlobals"));
+        a.emitLabel(a.name("initGlobals"));
+        a.emitPrologue();
+        Frame f = new FunctionFrame(formals, globals);
+        for (int i=0; i<formals.length; i++) {
+            compileFunction(a, globals);
+            //globals = defns[i].declareGlobals(a, globals);
+        }                                                      //ALMOST DONE. JUST NEED TO ITERATE THROUGH GLOBAL VAR LIST
+                                                               //AND COMPILE or COMPILEFUNCTION EACH OF THEM
+        //f.dump(a);
+        //if (body.compile(a, f)) {
+            a.emitEpilogue();
+        //}
+        a.emit();
+    }
 }
