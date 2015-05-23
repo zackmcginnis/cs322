@@ -134,7 +134,11 @@ and prologue of initGlobals:
 Admittedly, I knew I was probably going about this solution the wrong way since
 the above definition makes little sense. Aside from the fact that I was having troubles iterating
 over the declared global variables, I was also having errors whenever I tested a .prog file
-which contained more than one declared function. 
+which contained more than one declared function.
+
+I was also fairly confused since, based on my interpretation and the interpretation of some of
+my classmates, we were not allowed to create a new function/method labeled initGlobals.
+Because I was operating under this understanding, I was forced to some questionable programming!
 
 After seeking guidance, I went to look in other .java files for some clues about how I could
 better tackle this problem; namely, varIntro.java and initVarIntro.java.
