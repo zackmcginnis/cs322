@@ -95,21 +95,34 @@ public class For extends Stmt {
         //test = boolean
         //body = statement
 
+        //create new labels lab1 and lab2
+        //for body and test, respectively
         String lab1 = a.newLabel();
         String lab2 = a.newLabel();
 
+        //see if init is included
+        //and compile if true
         if (init != null)
           init.compileExpr(a, f);
 
+        //jump to test
         a.emit("jmp", lab2);
+
+        //lab1 contains the body of for loop
         a.emitLabel(lab1);
         body.compile(a, f);
 
-        //if (test == null)
-        //    return true;
-
+        //see if step is included
+        //and compile if true.
+        //will compile after body in 
+        //each loop iteration
         if (step != null)
           step.compileExpr(a, f);
+
+        //contains the test portion of the for loop
+        //if null, will compile body in an infinite loop
+        //if not null, will compile body if true, and
+        //repeat until test = false
 
         a.emitLabel(lab2);
         if (test != null)

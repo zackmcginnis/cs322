@@ -1,30 +1,27 @@
 void main() {
     
-int a = 1;
-int b = 2;
-int c = 2;
+ int a = 1;
+ int b = 2;
+ int c = 2;
 
-  while (a<10){
-  int d = 0;
-  	 while (d<a){
-       b = f(b, d);
-       print h(g(d));
-       d = 1+d;
-  	 }
-
-     print b;
-     b = b*c;
-     a = a+1;
-  }
-
-print a;
-
+ while (a<10){
+ int d = 0;
+   while (d<a){
+   b = f(b, d);
+   print h(g(d));
+   d = 1+d;
+   }
+ print b;
+ b = b*c;
+ a = a+1;
+ }
+ print a;
 }
 
 int f(int s, int t){
-int diff = s-t;
-diff = diff * g(diff);
-return diff;
+ int diff = s-t;
+ diff = diff * g(diff);
+ return diff;
 }
     
 int g(int u){
@@ -33,10 +30,9 @@ int g(int u){
    
 int h(int v){
   if(v < 2){
-   return 1;
+  return 1;
   }
-    int tem = h(v - 1);
-    return tem + h(v - 2);
-        
+  int tem = h(v - 1);
+  return tem + h(v - 2);       
 }
 
