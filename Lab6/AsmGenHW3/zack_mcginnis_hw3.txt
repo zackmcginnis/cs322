@@ -87,7 +87,7 @@ If the test is false, we break out of the loop and return from the function.
 
 
 
-3.
+3.1a
 solution.prog
 
 void main() {
@@ -128,19 +128,26 @@ int h(int v){
   return tem + h(v - 2);       
 }
 
+
+3.1b
 ------------------------------------------
 I have also uploaded a jpeg to the other dropbox which includes
 my diagrams/planning for my solution.prog file.
+-----------------------------------------------------
 
+3.2
 The original source may differ from my solution in a few different ways.
 First, the original source program may contain different variable names in the 
 function definitions for f(), g(), and h(). Although meaningless, it is likely that 
 the original source program has differing names for the vars within those definitions.
 
-Additionally,
+Additionally, the original source program may have also been able to utilize special 
+functions which replace commonly occuring instructions, such as x+1.
+
+
 
 While looking at sample.s, we can find 3 separate examples of poor code quality:
-3.a.
+3.3a.
 Within function Xg, we see the lines:
     movl    $2,   %eax
     movl    %edi, %esi
@@ -155,7 +162,7 @@ Because we know that we could just return the variable u instead of 2*u - u, we 
 this function by returning u.  This is more efficient since returning the variable saves 4 lines
 of instructions per function call.
 
-3.b
+3.3b
 Within function Xf, we see the lines:
     imull   %ecx, %eax
     movl    %eax, -8(%rbp)
@@ -172,7 +179,7 @@ Which would save us two lines of code by simply returning %eax
 directly after the imull instruction, rather than storing it in diff
 and returning diff. 
 
-3.c
+3.3c
 Additionally, when looking at the last two errors in combination, we notice another possible
 optimization. Since we know that function g essentially returns the original value of the variable
 passed in to it (e.g. g(u) = u), we can simply get rid of function g altogether.
