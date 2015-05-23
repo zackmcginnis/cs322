@@ -74,16 +74,84 @@ basically loops to lab1 and compiles the body + step if the test is true.
 If the test is false, we break out of the loop and return from the function.
 
 
+----------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------
+
 
 2.
-()
+Though I was unable to reproduce the desired explicit.s output, I was able to 
+produce a similar .s file. 
+My result after compiling the implicit.prog source program:
+        .file   "out.s"
+
+        .data
+Xx:
+        .long   0
+Xy:
+        .long   0
+
+        .text
+        .globl  XinitGlobals
+XinitGlobals:
+        pushq   %rbp
+        movq    %rsp, %rbp
+        movq    %rbp, %rsp
+        popq    %rbp
+        ret
+
+        .globl  Xmain
+Xmain:
+        pushq   %rbp
+        movq    %rsp, %rbp
+        movl    Xy, %edi
+        call    Xprint
+        movq    %rbp, %rsp
+        popq    %rbp
+        ret
+
+Within Function.java I was able to partially implement the name, epilogue,
+and prologue of initGlobals:
+
+    void compileFunction(Assembly a, LocEnv globals) {
+        a.emit(".globl", a.name("initGlobals"));
+        a.emitLabel(a.name("initGlobals"));
+        a.emitPrologue();
+        Frame f = new FunctionFrame(formals, globals);
+        for (int i=0; i<formals.length; i++) {
+            compileFunction(a, globals);
+        }   
+        a.emit();
+
+        a.emit(".globl", a.name(name));
+        a.emitLabel(a.name(name));
+        a.emitPrologue();
+        if (body.compile(a, f)) {
+            a.emitEpilogue();
+        }
+        a.emit();
+    }
+
+Admittedly, I knew I was probably going about this solution the wrong way since
+the above definition makes little sense. Aside from the fact that I was having troubles iterating
+over the declared global variables, I was also having errors whenever I tested a .prog file
+which contained more than one declared function. 
+
+After seeking guidance, I went to look in other .java files for some clues about how I could
+better tackle this problem; namely, varIntro.java and initVarIntro.java.
+Within each of the aforementioned .java files, I added the method:
+
+        public void compileGlobals(Assembly a, Frame f) {
+}
+
+My plan was to define this method, similar to how functions are compiled in the functions
+class, and use it on each global variable as I iterate through the list in Function.java.
+However, time contraints haven't allowed me the ability to work on this solution any further.
+I am very curious to see a working/implemented solution to this problem!
 
 
 
-
-
-
-
+----------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------
 
 
 
@@ -144,6 +212,9 @@ the original source program has differing names for the vars within those defini
 Additionally, the original source program may have also been able to utilize special 
 functions which replace commonly occuring instructions, such as x+1.
 
+I would also like to add that my implementation isn't exactly like the sample.s file.
+In the function h definition, I was unable to reproduce the exact register values 
+in regards to the variables tem and v. 
 
 
 While looking at sample.s, we can find 3 separate examples of poor code quality:
