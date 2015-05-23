@@ -12,6 +12,7 @@ public class InitVarIntro extends VarIntro {
      *  to provide the initial value for this variable.
      */
     private Expr exp;
+    private VarIntro[] intros
 
     /** Default constructor.
      */
@@ -66,9 +67,9 @@ public class InitVarIntro extends VarIntro {
        a.emit(".globl", a.name("initGlobals"));
         a.emitLabel(a.name("initGlobals"));
         a.emitPrologue();
-        Frame f = new FunctionFrame(vars, globals);
-        for (int i=0; i<vars.length; i++) {
-            compileGlobals(a, globals);
+        for (int i=0; i<used; i++) {
+            intros[i].compile(a, f);
+        }
             //globals = defns[i].declareGlobals(a, globals);
         }                                                      //ALMOST DONE. JUST NEED TO ITERATE THROUGH GLOBAL VAR LIST
                                                                //AND COMPILE or COMPILEFUNCTION EACH OF THEM
