@@ -66,9 +66,9 @@ public class InitVarIntro extends VarIntro {
        a.emit(".globl", a.name("initGlobals"));
         a.emitLabel(a.name("initGlobals"));
         a.emitPrologue();
-        Frame f = new FunctionFrame(formals, globals);
-        for (int i=0; i<formals.length; i++) {
-            compileFunction(a, globals);
+        Frame f = new FunctionFrame(vars, globals);
+        for (int i=0; i<vars.length; i++) {
+            compileGlobals(a, globals);
             //globals = defns[i].declareGlobals(a, globals);
         }                                                      //ALMOST DONE. JUST NEED TO ITERATE THROUGH GLOBAL VAR LIST
                                                                //AND COMPILE or COMPILEFUNCTION EACH OF THEM
