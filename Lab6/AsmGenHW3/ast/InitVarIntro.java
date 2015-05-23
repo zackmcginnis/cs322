@@ -12,7 +12,7 @@ public class InitVarIntro extends VarIntro {
      *  to provide the initial value for this variable.
      */
     private Expr exp;
-    private VarIntro[] intros
+    private VarIntro[] intros;
 
     /** Default constructor.
      */
@@ -71,7 +71,7 @@ public class InitVarIntro extends VarIntro {
             intros[i].compile(a, f);
         }
             //globals = defns[i].declareGlobals(a, globals);
-        }                                                      //ALMOST DONE. JUST NEED TO ITERATE THROUGH GLOBAL VAR LIST
+                                                              //ALMOST DONE. JUST NEED TO ITERATE THROUGH GLOBAL VAR LIST
                                                                //AND COMPILE or COMPILEFUNCTION EACH OF THEM
         //f.dump(a);
         //if (body.compile(a, f)) {
