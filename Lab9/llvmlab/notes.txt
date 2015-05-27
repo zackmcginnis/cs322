@@ -1,0 +1,297 @@
+-----------------------------------------------------------------------
+CS 322 Languages and Compiler Design II                        LLVM lab
+-----------------------------------------------------------------------
+
+These notes are in three parts:
+
+1) Basics of LLVM assembly code syntax
+2) Some simple examples of LLVM assembly code programs
+3) Using LLVM as a compiler target language
+
+-----------------------------------------------------------------------
+Part 1) Basics of LLVM assembly code syntax
+-----------------------------------------------------------------------
+
+-  llvm.org: details, code, reference materials, etc.
+
+-  LLVM assembly code filenames end with .ll
+
+-  Single line comments begin with semicolon
+
+-  Basic types:
+
+     i32      32 bit integer
+     i8       8 bit integer (byte)
+     i1       1 bit integer (boolean)
+     double   double precision floating point
+     T*       pointer to a T
+
+-  Integer (0, 1, 2, ...) and floating point
+   (0.0, 1.2, ...) literals
+
+-  Distinguishing local (%) and global (@)
+   identifiers from keywords, etc...
+
+-  "Values" are literals or local/global identifiers
+
+-  Global variable definitions:
+
+   @NAME = global TYPE INITVALUE
+
+   e.g.,   @zero = global i32 0
+           @pi   = global double 3.1415
+
+-  (External) function declarations:
+
+   declare TYPE @NAME(TYPE1, ...)
+
+   Use "void" instead of a type if the function does
+   not return a value.
+
+   e.g.,   declare void @print(i32)
+
+-  Function definitions:
+
+   define TYPE @NAME(TYPE1 %ARG1, ...) {
+      ... list of basic blocks ...
+   }
+
+   First block in function is called "entry"
+
+-  Basic blocks begin with a label followed by a
+   sequence of instructions:
+
+      LABEL:
+        instr1
+        instr2
+        ...
+        instrN
+
+   Last instruction terminates the block:
+
+   -  ret TYPE VALUE
+   -  ret void
+   -  br label %LABEL
+   -  br i1 %VALUE, label %IFTRUE, label %IFFALSE
+
+-  Other instructions can be of the form:
+
+   -  %RESULT = OP TYPE OPERAND1, OPERAND2
+      where OP is one of:
+        (integer arith) add, sub, mul, udiv, sdiv,
+            urem, srem (s=signed, u=unsigned)
+        (floating point) fadd, fsub, fmul, fdiv
+        (bitwise operators) shl, lshr, ashr, and,
+            or, xor
+      (Note: no unary operators)
+
+   -  %RESULT = icmp COND TYPE OPERAND1, OPERAND2
+      integer comparisons; COND is one of:
+         eq: equal;
+         ne: not equal;
+         ugt: unsigned greater than;
+         uge: unsigned greater or equal;
+         ult: unsigned less than;
+         ule: unsigned less or equal;
+         sgt: signed greater than;
+         sge: signed greater or equal;
+         slt: signed less than; or
+         sle: signed less or equal.
+
+   -  %RESULT = fcmp COND TYPE OPERAND1, OPERAND2
+      floating point comparisons; COND is one of:
+         false: no comparison, always returns false
+         oeq: ordered and equal
+         ogt: ordered and greater than
+         oge: ordered and greater than or equal
+         olt: ordered and less than
+         ole: ordered and less than or equal
+         one: ordered and not equal
+         ord: ordered (no nans)
+         ueq: unordered or equal
+         ugt: unordered or greater than
+         uge: unordered or greater than or equal
+         ult: unordered or less than
+         ule: unordered or less than or equal
+         une: unordered or not equal
+         uno: unordered (either nans)
+         true: no comparison, always returns true
+
+   -  %RESULT = alloca TYPE  allocate space on stack,
+      returns a result of type TYPE*
+
+   -  %RESULT = load TYPE* OPERAND
+      OPERAND provides the address of a variable that
+      we will load from (hence the pointer type)
+
+   -  store TYPE VALUE, TYPE* ADDR
+
+   -  %RESULT = call TYPE @NAME(TYPE1 ARG1, ...)
+
+      or, for calls to void functions:
+
+      call void @NAME(TYPE1 ARG1, ...)
+
+   -  %RESULT = phi TYPE [ VALUE, %BLOCK ], ...
+      A "phi" function: choose a value for %RESULT
+      depending on the previous block.  This is a key part
+      of the SSA form (single static assignment) that LLVM
+      relies on; we'll say more about this shortly.
+
+-----------------------------------------------------------------------
+Part 2) Some simple examples of LLVM assembly code programs
+-----------------------------------------------------------------------
+
+simple.ll
+=========
+
+-  Illustrate basic syntax of an LLVM source file (.ll)
+
+-  Use llc to generate assembly code
+   (ability to target multiple architectures)
+
+   llc-3.4 -O0 -filetype=asm simple.ll
+   llc-3.4 -O0 -filetype=asm -march=x86 simple.ll
+   llc-3.4 -O0 -filetype=asm -march=arm simple.ll
+   llc-3.4 -O0 -filetype=asm -march=x86-64 simple.ll
+
+-  Use clang to compile and link generated assembly code with
+   runtime library to make executable.
+
+   clang -o simple simple.s runtime.c
+   ./simple
+
+-  Use opt to demonstrate optimization
+
+   opt-3.4 -S  simple.ll
+   opt-3.4 -S -gvn simple.ll
+
+-  Use llc with optimization 
+
+   llc-3.4 -O2 -filetype=asm -march=x86-64 simple.ll
+   clang -o simple simple.s runtime.c
+   ./simple
+
+cfold.ll
+========
+
+-  Illustrate use of "constant folding"
+
+   opt-3.4 -S cfold.ll
+   opt-3.4 -S -gvn cfold.ll
+
+-  Portable optimization
+
+   llc-3.4 -filetype=asm -march=x86-64 cfold.ll
+   llc-3.4 -filetype=asm -march=arm    cfold.ll
+
+cse.ll
+======
+
+-  Common subexpression elimination (gvn is short for
+   global value numbering)
+
+    opt-3.4 -S                   cse.ll
+    opt-3.4 -S -gvn              cse.ll
+
+-  Idempotence:
+
+    opt-3.4 -S -gvn -gvn         cse.ll
+
+-  Opportunities for inlining
+
+    opt-3.4 -S -gvn -inline      cse.ll
+
+-  One optimization opens up opportunities for others
+
+    opt-3.4 -S -gvn -inline -gvn cse.ll
+
+inline.ll
+=========
+
+-  More opportunities to play with gvn and inlining
+
+ssa0.ll
+=======
+
+-  Single Static Assignment (SSA) form: Program cannot contain
+   more than one assignment to the same variable.
+
+   opt-3.4 -S ssa0.ll
+
+-  Rework to load zero from an initialized global variable;
+   still won't work because it breaks SSA requirement.
+
+
+ssa1.ll
+=======
+
+-  Could rewrite ssa0.ll to get here instead of using ssa1.ll
+   if there is enough time.
+
+-  Introducing the "phi function"
+
+-  Draw flowgraph to understand
+
+-  Can find more about SSA at:
+   http://en.wikipedia.org/wiki/Static_single_assignment_form
+
+ssa2.ll
+=======
+
+-  Using alloca to allocate space for variables on the stack
+
+-  Using opt-3.4 -mem2reg to shift to registers
+
+exercise.ll
+===========
+
+-  Using the given file as a starting point, write, compile,
+   and run an LLVM program to print out the factorials of the
+   numbers from 0 to 10.
+
+-----------------------------------------------------------------------
+Part 3) Using LLVM as a compiler target language
+-----------------------------------------------------------------------
+
+-  cd LLVMGen and then run make
+
+-  Try java LLVMGen on test?.prog examples
+
+-  Take a peek at compilation rules for Block, Print, ...
+
+-  Edit ast/DoWhile.java to add implementation for compile method
+
+    public Code compile(final llvm.Function fn, final Code andThen) {
+        final Basic head = fn.block();
+        head.set(body.compile(fn,
+                 test.compile(fn, new ValCont() {
+                     Code with(final Value v) {
+                         return new llvm.Cond(v,
+                                              head,
+                                              fn.block(andThen));
+                     }
+                 })));
+        return new llvm.Goto(head);
+    }
+
+-  $ java LLVMGen dowhile.prog 
+   $ llc-3.4 -O0 -filetype=asm -march=x86-64 dowhile.prog.ll 
+   $ clang -o dowhile dowhile.prog.s runtime.c 
+   $ ./dowhile
+   output: 1
+   output: 2
+   output: 3
+   output: 4
+   output: 5
+   output: 6
+   output: 7
+   output: 8
+   output: 9
+   output: 10
+   output: 100
+   $
+
+-  Experiment with optimization options!
+
+-----------------------------------------------------------------------

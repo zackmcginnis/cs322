@@ -1,0 +1,17 @@
+#!/bin/bash
+
+if [ -z $1 ];
+then
+  echo "No input file specified"
+else
+  ROOT=`basename -s .prog $1`
+  if [ $1 = $ROOT ];
+  then
+    echo "Missing .prog filename suffix"
+  else
+    java LLVMGen $1
+    llc-3.4 -O0 -filetype=asm $1.ll
+    clang -o $ROOT $1.s runtime.c
+  fi
+fi
+
