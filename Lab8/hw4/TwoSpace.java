@@ -78,7 +78,7 @@ class TwoSpace extends Heap {
            for (int i = 0; i <= heap[addr]; i++) {
                toSpace[hp++] = heap[addr + i];
            }
-           heap[addy] = dest;
+           heap[addr] = dest;
        }
        return dest;
   }
