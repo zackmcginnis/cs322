@@ -74,7 +74,6 @@ class TwoSpace extends Heap {
       //from old heap to toSpace using for loop
       int dest = hp - size;
       if (heap[addr] >= 0){
-           System.out.println("Forwarding object at address: " + obj);
            for (int i = 0; i <= heap[addr]; i++) {
                toSpace[hp++] = heap[addr + i];
            }
@@ -90,7 +89,6 @@ class TwoSpace extends Heap {
    *  start of the object).
    */
   private int scavenge(int obj) {
-    System.out.println("\nScavenging object at address: " + (obj-size));
     int len = toSpace[obj];
     // Scan the fields in this object, using forward on
     // any pointer fields that we find to make sure the
@@ -99,7 +97,6 @@ class TwoSpace extends Heap {
       for (int i = obj; i <= (obj+len); i++) {
           toSpace[i] = forward(toSpace[i]);
       }
-    System.out.println("Scavenging ended with object at address: " + (obj-size));
     return len + 1;
   }
 }
