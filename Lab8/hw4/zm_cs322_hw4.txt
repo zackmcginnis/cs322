@@ -301,6 +301,14 @@ when N > 12 (and S = 100), as well as when N > 8 (and S = 50).
 
 Using this knowledge, as well as looking at how the for loop in TestHeap4
 is written, we can deduce that:
+S > (sum of N as i=0 grows toward upper bound of N, i+2 on each iteration)
+For example, in the case of N > 8 (and S = 50), we see that space is allocated
+for each object by adding: 2+3+4+5+6+7+8+9 = 45.
+Object 0 allocates 0+2, Object 1 allocates 1+2, Object 2 allocates 2+2,
+and so on, until Object 7 allocates 7+2.
+If we set N = 9, the program will attempt to allocate 10 words for Object 8,
+which will induce an error since 50 > 45+10 is false.
+
 
 A garbage collect call in this program (with valid S and N values) will
 forward all objects into the new heap, and display them in a reversed order.
