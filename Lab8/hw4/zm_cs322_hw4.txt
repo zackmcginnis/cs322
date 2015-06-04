@@ -224,6 +224,16 @@ class TestHeap3 {
     h.store(t, 2, h.alloc(4));
     h.alloc(2);
 
+    h.dump();
+    System.out.println("Free space remaining = " + h.freeSpace());
+
+    h.garbageCollect();
+
+    h.dump();
+    System.out.println("Free space remaining = " + h.freeSpace());
+  }
+}
+
 The generated output after running this modified version of TestHeap3 is:
 
 Object at address -100, length=3, data=[0, 0, 0]
@@ -242,6 +252,18 @@ So we see that no objects are forwarded to the new heap when we use our
 variable t instead of h.a.   We are unable to allocate our desired objects onto 
 the new heap because we are unable to keep track of where our objects are
 located in the original heap. 
+
+If the code snippet:
+
+for (heap[hp++]=len; len>0; len--) {
+  heap[hp++] = 0;
+}
+
+were to be omitted from alloc() in Heap.java, we would expect some unsavory results.
+Namely, because we won't be initializing each object to zero, these objects would contain
+unexpected values.  These unexpected values will likely cause erroneous results after garbage collection. Such unexpected values may point to undesired addresses and cause our program to crash, or they may simply point to addresses which should not have been forwarded to our new heap.
+Either way, our garbage collection will fail by having a heap with the incorrect addresses
+forwarded to it, or by terminating with a fatal error.
 
 
 
