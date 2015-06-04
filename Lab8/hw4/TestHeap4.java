@@ -1,6 +1,6 @@
 class TestHeap4 {
-  static final int S = 100;
-  static final int N = 13;
+  static final int S = 50;
+  static final int N = 6;
 
   public static void main(String[] args) {
     Heap h = Heap.make(S);
