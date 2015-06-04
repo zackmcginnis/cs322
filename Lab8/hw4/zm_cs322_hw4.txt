@@ -151,8 +151,62 @@ Free space remaining = 19
 TestHeap2
 With N = 40, and S = 75
 
+Allocating object 0 at address -75
+Allocating object 1 at address -66
+Allocating object 2 at address -57
+Allocating object 3 at address -48
+Allocating object 4 at address -39
+Allocating object 5 at address -30
+Allocating object 6 at address -21
+Allocating object 7 at address -12
+Allocating object 8 at address -75
+Allocating object 9 at address -66
+Allocating object 10 at address -57
+Allocating object 11 at address -48
+Allocating object 12 at address -39
+Allocating object 13 at address -30
+Allocating object 14 at address -21
+Allocating object 15 at address -12
+Allocating object 16 at address -75
+Allocating object 17 at address -66
+Allocating object 18 at address -57
+Allocating object 19 at address -48
+Allocating object 20 at address -39
+Allocating object 21 at address -30
+Allocating object 22 at address -21
+Allocating object 23 at address -12
+Allocating object 24 at address -75
+Allocating object 25 at address -66
+Allocating object 26 at address -57
+Allocating object 27 at address -48
+Allocating object 28 at address -39
+Allocating object 29 at address -30
+Allocating object 30 at address -21
+Allocating object 31 at address -12
+Allocating object 32 at address -75
+Allocating object 33 at address -66
+Allocating object 34 at address -57
+Allocating object 35 at address -48
+Allocating object 36 at address -39
+Allocating object 37 at address -30
+Allocating object 38 at address -21
+Allocating object 39 at address -12
+Object at address -75, length=8, data=[0, 0, 0, 0, 0, 0, 0, 0]
+Object at address -66, length=8, data=[0, 0, 0, 0, 0, 0, 0, 0]
+Object at address -57, length=8, data=[0, 0, 0, 0, 0, 0, 0, 0]
+Object at address -48, length=8, data=[0, 0, 0, 0, 0, 0, 0, 0]
+Object at address -39, length=8, data=[0, 0, 0, 0, 0, 0, 0, 0]
+Object at address -30, length=8, data=[0, 0, 0, 0, 0, 0, 0, 0]
+Object at address -21, length=8, data=[0, 0, 0, 0, 0, 0, 0, 0]
+Object at address -12, length=8, data=[0, 0, 0, 0, 0, 0, 0, 0]
+Heap allocation pointer: 72
+Free space remaining = 3
 
-
+The results of our last two tests show that a new heap is being allocated 
+for our objects once the original heap becomes full.  The contents
+of the old heap are discarded completely (since these
+objects contain no data), and the new heap
+begins to allocate the next object(s).
 
 
 #3
