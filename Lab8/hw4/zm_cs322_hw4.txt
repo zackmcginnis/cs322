@@ -296,8 +296,8 @@ unexpected values.  These unexpected values will likely cause erroneous results 
 
 #4
 
-
-
+As TestHeap4 is written
+S must remain greater than
 
 
 
