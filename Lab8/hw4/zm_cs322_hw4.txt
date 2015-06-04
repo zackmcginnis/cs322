@@ -317,5 +317,13 @@ forward all objects into the new heap, and display them in a reversed order.
 
 
 
+It's apparent from the output generated above that the two objects point to eachother and that they are indeed being preserved on the heap after garbage collection.
+
+
+Show that it is possible to construct cyclic structures in the heap and that these structures are preserved by
+the copying garbage collector implementation.
+
+
+
 
 
