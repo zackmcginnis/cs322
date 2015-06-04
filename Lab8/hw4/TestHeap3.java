@@ -1,10 +1,10 @@
 class TestHeap3 {
   static final int S = 100;
-
+  static int t;
   public static void main(String[] args) {
     Heap h = Heap.make(S);
     h.alloc(3);
-    h.a = h.alloc(9);
+    t = h.alloc(9);
     h.alloc(3);
     h.store(h.a, 1, h.alloc(5));
     h.alloc(5);
