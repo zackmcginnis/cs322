@@ -6,9 +6,9 @@ class TestHeap3 {
     h.alloc(3);
     t = h.alloc(9);
     h.alloc(3);
-    h.store(h.a, 1, h.alloc(5));
+    h.store(t, 1, h.alloc(5));
     h.alloc(5);
-    h.store(h.a, 2, h.alloc(4));
+    h.store(t, 2, h.alloc(4));
     h.alloc(2);
 
     h.dump();
