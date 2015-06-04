@@ -296,8 +296,10 @@ unexpected values.  These unexpected values will likely cause erroneous results 
 
 #4
 
-As TestHeap4 is written
-S must remain greater than
+As TestHeap4 is written, a "Fatal error: Out of memory!" error occurs
+when N > 12 (and S = 100).
+Since 
+ 
 
 
 
