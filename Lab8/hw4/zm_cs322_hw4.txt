@@ -297,9 +297,13 @@ unexpected values.  These unexpected values will likely cause erroneous results 
 #4
 
 As TestHeap4 is written, a "Fatal error: Out of memory!" error occurs
-when N > 12 (and S = 100).
-Since 
- 
+when N > 12 (and S = 100), as well as when N > 8 (and S = 50).
+
+Using this knowledge, as well as looking at how the for loop in TestHeap4
+is written, we can deduce that:
+
+A garbage collect call in this program (with valid S and N values) will
+forward all objects into the new heap, and display them in a reversed order.
 
 
 
