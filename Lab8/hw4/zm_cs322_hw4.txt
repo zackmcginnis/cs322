@@ -1,0 +1,258 @@
+Zack McGinnis
+CS322
+HW #4
+Spring 2015
+
+
+#1.
+
+As TestHeap2 is written, we can see that a heap is created with
+S = 100 words. Each object in the heap will need to utilize 9 words:
+1 word for each of the 8 fields (1*8), and 1 for the tag/count of fields in each object.
+Since S=100, if N * 9 is greater than 100, we will not have enough
+available memory in the heap.
+
+Therefore, since each object requires 9 words, we can state that 9*N < S must be true 
+in order for us to ensure adequate memory availability in the heap. 
+Substituting S = 100, we can state that 9*N < 100.
+This statement remains true for all N <= 11, since 9*11 = 99,
+and 99 < 100 remains true. 
+However, when N = 12, 9*12 = 108, and 108 < 100 is false.
+So N = 12 is the lowest possible N value which will cause a fatal error
+due to lack of available memory in the heap.
+
+If heap included a working garbage collector, the 12th object would be written to a 
+new heap. The previous 11 objects on the old heap will be discarded since they 
+were not in use/were empty.
+
+
+
+#2.
+
+  private int forward(int obj) {
+    // There are three cases that you will need to handle here.
+    // 1) If obj is not a pointer (i.e., if it is greater than
+    //    or equal to zero), then you should just return obj
+    //    directly.
+    // 2) If obj is a pointer, but the length field of the object
+    //    that it points to is negative, then (a) we can conclude
+    //    that the object has already been forwarded; and (b) we
+    //    can just return the (negative) length value, which is a
+    //    pointer to the object's new location in toSpace.
+    // 3) If obj is a pointer and the length field is non negative,
+    //    then it points to an object that needs to be forwarded to
+    //    toSpace.  This requires us to copy the length word and
+    //    the associated fields from the heap into the toSpace.
+    //    After that, we overwrite the length field with a pointer
+    //    to the location of the object in toSpace (because it is
+    //    a pointer, this will be a negative number).
+    // The description here is longer than my code!
+
+      //Case #1
+      if (obj >= 0) return obj;
+
+      //Case #2
+      int addr = size+obj;
+      if (heap[addr] < 0)  return heap[addr];
+
+      //Case #3
+      //We copy all fields of each object (plus length)
+      //from old heap to toSpace using for loop
+      int dest = hp - size;
+      if (heap[addr] >= 0){
+           for (int i = 0; i <= heap[addr]; i++) {
+               toSpace[hp++] = heap[addr + i];
+           }
+           heap[addr] = dest;
+       }
+       return dest;
+  }
+
+
+  private int scavenge(int obj) {
+    int len = toSpace[obj];
+    // Scan the fields in this object, using forward on
+    // any pointer fields that we find to make sure the
+    // objects that they refer to are copied into toSpace.
+
+      for (int i = obj; i <= (obj+len); i++) {
+          toSpace[i] = forward(toSpace[i]);
+      }
+    return len + 1;
+  }
+
+
+The output of TestHeap2, TestHeap3, and TestHeap4 (with Heap.make() returning the TwoSpace constructor) are as follows:
+
+TestHeap2
+With N = 20, and S = 100
+
+Allocating object 0 at address -100
+Allocating object 1 at address -91
+Allocating object 2 at address -82
+Allocating object 3 at address -73
+Allocating object 4 at address -64
+Allocating object 5 at address -55
+Allocating object 6 at address -46
+Allocating object 7 at address -37
+Allocating object 8 at address -28
+Allocating object 9 at address -19
+Allocating object 10 at address -10
+Allocating object 11 at address -100
+Allocating object 12 at address -91
+Allocating object 13 at address -82
+Allocating object 14 at address -73
+Allocating object 15 at address -64
+Allocating object 16 at address -55
+Allocating object 17 at address -46
+Allocating object 18 at address -37
+Allocating object 19 at address -28
+Object at address -100, length=8, data=[0, 0, 0, 0, 0, 0, 0, 0]
+Object at address -91, length=8, data=[0, 0, 0, 0, 0, 0, 0, 0]
+Object at address -82, length=8, data=[0, 0, 0, 0, 0, 0, 0, 0]
+Object at address -73, length=8, data=[0, 0, 0, 0, 0, 0, 0, 0]
+Object at address -64, length=8, data=[0, 0, 0, 0, 0, 0, 0, 0]
+Object at address -55, length=8, data=[0, 0, 0, 0, 0, 0, 0, 0]
+Object at address -46, length=8, data=[0, 0, 0, 0, 0, 0, 0, 0]
+Object at address -37, length=8, data=[0, 0, 0, 0, 0, 0, 0, 0]
+Object at address -28, length=8, data=[0, 0, 0, 0, 0, 0, 0, 0]
+Heap allocation pointer: 81
+Free space remaining = 19
+
+
+
+TestHeap3
+
+Object at address -100, length=3, data=[0, 0, 0]
+Object at address -96, length=9, data=[-82, -70, 0, 0, 0, 0, 0, 0, 0]
+Object at address -86, length=3, data=[0, 0, 0]
+Object at address -82, length=5, data=[0, 0, 0, 0, 0]
+Object at address -76, length=5, data=[0, 0, 0, 0, 0]
+Object at address -70, length=4, data=[0, 0, 0, 0]
+Object at address -65, length=2, data=[0, 0]
+Heap allocation pointer: 38
+Free space remaining = 62
+Object at address -100, length=9, data=[-90, -84, 0, 0, 0, 0, 0, 0, 0]
+Object at address -90, length=5, data=[0, 0, 0, 0, 0]
+Object at address -84, length=4, data=[0, 0, 0, 0]
+Heap allocation pointer: 21
+Free space remaining = 79
+
+
+TestHeap4
+
+Allocating object 0 at address -100
+Allocating object 1 at address -98
+Allocating object 2 at address -95
+Allocating object 3 at address -91
+Allocating object 4 at address -86
+Allocating object 5 at address -80
+Allocating object 6 at address -73
+Allocating object 7 at address -65
+Allocating object 8 at address -56
+Allocating object 9 at address -46
+Before garbage collection;
+Object at address -100, length=1, data=[0]
+Object at address -98, length=2, data=[-100, 0]
+Object at address -95, length=3, data=[-98, 0, 0]
+Object at address -91, length=4, data=[-95, 0, 0, 0]
+Object at address -86, length=5, data=[-91, 0, 0, 0, 0]
+Object at address -80, length=6, data=[-86, 0, 0, 0, 0, 0]
+Object at address -73, length=7, data=[-80, 0, 0, 0, 0, 0, 0]
+Object at address -65, length=8, data=[-73, 0, 0, 0, 0, 0, 0, 0]
+Object at address -56, length=9, data=[-65, 0, 0, 0, 0, 0, 0, 0, 0]
+Object at address -46, length=10, data=[-56, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+Heap allocation pointer: 65
+Free space remaining = 35
+After garbage collection;
+Object at address -100, length=10, data=[-89, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+Object at address -89, length=9, data=[-79, 0, 0, 0, 0, 0, 0, 0, 0]
+Object at address -79, length=8, data=[-70, 0, 0, 0, 0, 0, 0, 0]
+Object at address -70, length=7, data=[-62, 0, 0, 0, 0, 0, 0]
+Object at address -62, length=6, data=[-55, 0, 0, 0, 0, 0]
+Object at address -55, length=5, data=[-49, 0, 0, 0, 0]
+Object at address -49, length=4, data=[-44, 0, 0, 0]
+Object at address -44, length=3, data=[-40, 0, 0]
+Object at address -40, length=2, data=[-37, 0]
+Object at address -37, length=1, data=[0]
+Heap allocation pointer: 65
+Free space remaining = 35
+
+
+
+#3
+
+After running TestHeap3 (as seen in Question #2 as well) our output is:
+
+Object at address -100, length=3, data=[0, 0, 0]
+Object at address -96, length=9, data=[-82, -70, 0, 0, 0, 0, 0, 0, 0]
+Object at address -86, length=3, data=[0, 0, 0]
+Object at address -82, length=5, data=[0, 0, 0, 0, 0]
+Object at address -76, length=5, data=[0, 0, 0, 0, 0]
+Object at address -70, length=4, data=[0, 0, 0, 0]
+Object at address -65, length=2, data=[0, 0]
+Heap allocation pointer: 38
+Free space remaining = 62
+Object at address -100, length=9, data=[-90, -84, 0, 0, 0, 0, 0, 0, 0]
+Object at address -90, length=5, data=[0, 0, 0, 0, 0]
+Object at address -84, length=4, data=[0, 0, 0, 0]
+Heap allocation pointer: 21
+Free space remaining = 79
+
+As we can see from the output, our garbage collector identifies that the
+object at address -96 in the original heap must be forwarded and
+added to the new heap. Additionally, since this object contains pointers to 
+objects at -82 and -70, these objects must also be forwarded to the new heap.
+After garbage collection, we see that we have successfully eliminated the 
+garbage objects found in the original heap, as our new heap contains 
+objects with relevant data values.
+
+
+By replacing h.a with a simple local integer variable t, we will
+also point the heap to our variable t:
+
+class TestHeap3 {
+  static final int S = 100;
+  static int t;
+  public static void main(String[] args) {
+    Heap h = Heap.make(S);
+    h.alloc(3);
+    t = h.alloc(9);
+    h.alloc(3);
+    h.store(t, 1, h.alloc(5));
+    h.alloc(5);
+    h.store(t, 2, h.alloc(4));
+    h.alloc(2);
+
+The generated output after running this modified version of TestHeap3 is:
+
+Object at address -100, length=3, data=[0, 0, 0]
+Object at address -96, length=9, data=[-82, -70, 0, 0, 0, 0, 0, 0, 0]
+Object at address -86, length=3, data=[0, 0, 0]
+Object at address -82, length=5, data=[0, 0, 0, 0, 0]
+Object at address -76, length=5, data=[0, 0, 0, 0, 0]
+Object at address -70, length=4, data=[0, 0, 0, 0]
+Object at address -65, length=2, data=[0, 0]
+Heap allocation pointer: 38
+Free space remaining = 62
+Heap allocation pointer: 0
+Free space remaining = 100
+
+So we see that no objects are forwarded to the new heap when we use our
+variable t instead of h.a.   We are unable to allocate our desired objects onto 
+the new heap because we are unable to keep track of where our objects are
+located in the original heap. 
+
+
+
+#4
+
+
+
+
+
+
+
+
+
+
