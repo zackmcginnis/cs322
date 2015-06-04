@@ -261,9 +261,7 @@ for (heap[hp++]=len; len>0; len--) {
 
 were to be omitted from alloc() in Heap.java, we would expect some unsavory results.
 Namely, because we won't be initializing each object to zero, these objects would contain
-unexpected values.  These unexpected values will likely cause erroneous results after garbage collection. Such unexpected values may point to undesired addresses and cause our program to crash, or they may simply point to addresses which should not have been forwarded to our new heap.
-Either way, our garbage collection will fail by having a heap with the incorrect addresses
-forwarded to it, or by terminating with a fatal error.
+unexpected values.  These unexpected values will likely cause erroneous results after garbage collection. Such unexpected values may point to undesired addresses and cause our program to crash, or they may simply point to addresses which won't cause a crash, but should not have been forwarded to our new heap. Either way, our garbage collection will fail by having a heap with the incorrect addresses forwarded to it, or by terminating with a fatal error.
 
 
 
