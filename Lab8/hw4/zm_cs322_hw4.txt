@@ -82,7 +82,7 @@ were not in use/were empty.
   }
 
 
-The output of TestHeap2, TestHeap3, and TestHeap4 (with Heap.make() returning the TwoSpace constructor) are as follows:
+The output of modified TestHeap2 tests (with Heap.make() returning the TwoSpace constructor) are as follows:
 
 
 TestHeap2
@@ -234,11 +234,11 @@ added to the new heap. Additionally, since this object contains pointers to
 objects at -82 and -70, these objects must also be forwarded to the new heap.
 After garbage collection, we see that we have successfully eliminated the 
 garbage objects found in the original heap, as our new heap contains 
-objects with relevant data values.
+objects with relevant data values (at -100, -90, and -84).
 
 
 By replacing h.a with a simple local integer variable t, we will
-also point the heap to our variable t:
+point the heap to our variable t:
 
 class TestHeap3 {
   static final int S = 100;
@@ -313,17 +313,47 @@ which will induce an error since 50 > 45+10 is false.
 A garbage collect call in this program (with valid S and N values) will
 forward all objects into the new heap, and display them in a reversed order.
 
+Below is a modified version of TestHeap4 (titled TestHeap4c) which shows one possible way to 
+construct a cyclic structure within a heap.  In TestHeap4c, h.a and h.b are
+used to allocate space for two objects. Additionally, we will store a pointer
+to h.a in h.b as well as a pointer to h.b in h.a.
 
+class TestHeap4c {
+  static final int S = 100;
 
+  public static void main(String[] args) {
+    Heap h = Heap.make(S);
+    h.a = h.alloc(1);
+    h.b = h.alloc(1);
 
+    h.store(h.a, 1, h.b);
+    h.store(h.b, 1, h.a);
 
-It's apparent from the output generated above that the two objects point to eachother and that they are indeed being preserved on the heap after garbage collection.
+    System.out.println("Before garbage collection;");
+    h.dump();
+    System.out.println("Free space remaining = " + h.freeSpace());
 
+    h.garbageCollect();
 
-Show that it is possible to construct cyclic structures in the heap and that these structures are preserved by
-the copying garbage collector implementation.
+    System.out.println("After garbage collection;");
+    h.dump();
+    System.out.println("Free space remaining = " + h.freeSpace());
+  }
+}
 
+The output of TestHeap4c are as follows:
 
+Before garbage collection;
+Object at address -100, length=1, data=[-98]
+Object at address -98, length=1, data=[-100]
+Heap allocation pointer: 4
+Free space remaining = 96
+After garbage collection;
+Object at address -100, length=1, data=[-98]
+Object at address -98, length=1, data=[-100]
+Heap allocation pointer: 4
+Free space remaining = 96
 
-
-
+As we can see from the results, the garbage collect call does not appear effect the
+relationship of either object pointing to each other, and the data seems to have
+been preserved.
